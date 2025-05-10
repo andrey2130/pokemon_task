@@ -31,7 +31,7 @@ class PokemonSilhouette extends StatelessWidget {
               imageUrl: pokemon.imageUrl,
               placeholder:
                   (context, url) =>
-                      const Center(child: CircularProgressIndicator()),
+                      const Center(child: CircularProgressIndicator.adaptive()),
               errorWidget:
                   (context, url, error) =>
                       Icon(Icons.error, color: theme.colorScheme.error),

@@ -17,7 +17,7 @@ class PokemonDetailsCard extends StatelessWidget {
         CachedNetworkImage(
           imageUrl: pokemon.imageUrl,
           height: 200,
-          placeholder: (context, url) => const CircularProgressIndicator(),
+          placeholder: (context, url) => const CircularProgressIndicator.adaptive(),
           errorWidget:
               (context, url, error) =>
                   Icon(Icons.error, color: Theme.of(context).colorScheme.error),

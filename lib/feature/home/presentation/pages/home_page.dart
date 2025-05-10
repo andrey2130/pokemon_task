@@ -97,7 +97,7 @@ class _HomePageState extends State<HomePage> {
       return _buildStartScreen(context);
     } else if (state is Loading) {
       debugPrint('[HomePage _buildBody] State is Loading.');
-      return const Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator.adaptive());
     } else if (state is Error) {
       debugPrint('[HomePage _buildBody] State is Error: ${state.message}');
       return Center(child: Text('Error: ${state.message}'));
