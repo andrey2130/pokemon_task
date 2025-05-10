@@ -82,7 +82,7 @@ class LeaderboardTabBar extends StatelessWidget {
               Text(
                 label,
                 style: TextStyle(
-                  color: isSelected ? Colors.white : Colors.transparent,
+                  color: isSelected ? Colors.white : Colors.grey,
                   fontWeight: FontWeight.bold,
                 ),
               ),

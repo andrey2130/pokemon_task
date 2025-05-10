@@ -21,7 +21,6 @@ class AuthRepoImpl implements AuthRepository {
       final userCredential = await authDataSource
           .createUserWithEmailAndPassword(params);
 
-      // Save additional user data to Firestore
       await userDataSource.saveUserData(userCredential.user!, params);
 
       return Right(userCredential);

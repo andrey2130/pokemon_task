@@ -151,9 +151,7 @@ class ResultWidget extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   backgroundColor:
                       currentRound < totalRounds
-                          ? theme
-                              .colorScheme
-                              .primary // This should be fine for both themes as it's the primary action
+                          ? theme.colorScheme.primary
                           : buttonViewResultsBackgroundColor,
                 ),
                 child: Text(

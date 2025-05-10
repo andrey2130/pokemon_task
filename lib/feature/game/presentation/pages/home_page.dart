@@ -66,7 +66,7 @@ class _GamePageState extends State<GamePage> {
             appBar: AppBar(
               title: const Text('Who\'s That Pokémon?'),
               actions:
-                  _gameStarted
+                  _gameStarted && _currentRound <= _totalRounds
                       ? [
                         Center(
                           child: Padding(
@@ -127,15 +127,24 @@ class _GamePageState extends State<GamePage> {
         '[HomePage _buildBody] Result details: Correct Pokemon: ${state.result.correctPokemon.name}, Selected: ${state.result.selectedName}, IsCorrect: ${state.result.isCorrect}, Streak: ${state.streak}',
       );
 
-      if (_currentRound >= _totalRounds) {
+      if (_currentRound > _totalRounds) {
         debugPrint(
-          '[HomePage _buildBody] Last round completed. Building GameFinishedScreen.',
+          '[HomePage _buildBody] Game is finished. Building GameFinishedScreen.',
         );
         return _buildGameFinishedScreen(context);
       }
 
+      if (_currentRound == _totalRounds &&
+          state.result.selectedName == "timeout") {
+        debugPrint(
+          '[HomePage _buildBody] Timeout on last round. Building GameFinishedScreen.',
+        );
+        _saveUserStats(state.streak, false);
+        return _buildGameFinishedScreen(context);
+      }
+
       debugPrint(
-        '[HomePage _buildBody] Not the last round. Building ResultWidget for round: $_currentRound',
+        '[HomePage _buildBody] Building ResultWidget for round: $_currentRound',
       );
       return ResultWidget(
         result: state.result,
@@ -143,18 +152,34 @@ class _GamePageState extends State<GamePage> {
         currentRound: _currentRound,
         totalRounds: _totalRounds,
         onNextRound: () {
-          setState(() {
-            _currentRound++;
-          });
-          context.read<PokemonGameBloc>().add(
-            const PokemonGameEvent.startNewRound(),
-          );
+          if (_currentRound >= _totalRounds) {
+            debugPrint(
+              '[HomePage _buildBody] Last round completed. Moving to GameFinishedScreen.',
+            );
+            setState(() {
+              _currentRound = _totalRounds + 1;
+            });
+            _showBottomNavigationBar(context);
+          } else {
+            setState(() {
+              _currentRound++;
+            });
+            context.read<PokemonGameBloc>().add(
+              const PokemonGameEvent.startNewRound(),
+            );
+          }
         },
         onViewResults: () {
+          debugPrint('[HomePage _buildBody] View Results button clicked.');
           setState(() {
             _gameStarted = false;
+            _currentRound = _totalRounds + 1;
           });
           _showBottomNavigationBar(context);
+
+          Future.delayed(Duration.zero, () {
+            setState(() {});
+          });
         },
       );
     }

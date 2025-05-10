@@ -111,7 +111,6 @@ class LeaderboardBloc extends Bloc<LeaderboardEvent, LeaderboardState> {
         isCorrectAnswer: event.isCorrectAnswer,
       );
 
-      // After updating, refresh the current tab data
       switch (state.currentTab) {
         case LeaderboardTab.scores:
           add(const LeaderboardEvent.loadTopScores());
