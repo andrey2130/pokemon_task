@@ -68,102 +68,102 @@ class ResultWidget extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            decoration: BoxDecoration(
-              color: roundInfoBackgroundColor,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.sports_score, color: roundInfoIconColor),
-                const SizedBox(width: 8),
-                Text(
-                  'Round $currentRound of $totalRounds',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    color: roundInfoTextColor,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                color: roundInfoBackgroundColor,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.sports_score, color: roundInfoIconColor),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Round $currentRound of $totalRounds',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: roundInfoTextColor,
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ),
-
-          const SizedBox(height: 20),
-
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            decoration: BoxDecoration(
-              color: streakBackgroundColor,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.local_fire_department, color: streakIconColor),
-                const SizedBox(width: 8),
-                Text(
-                  'Current Streak: $streak',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    color: streakTextColor,
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          const SizedBox(height: 30),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-            decoration: BoxDecoration(
-              color: resultMessageBackgroundColor,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Text(
-              isCorrect
-                  ? 'You caught it! 🎉'
-                  : 'Oops! It was ${_formatPokemonName(correctPokemon.name)} 😅',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: resultMessageTextColor,
+                ],
               ),
             ),
-          ),
 
-          const SizedBox(height: 20),
+            const SizedBox(height: 20),
 
-          Expanded(
-            child: Center(child: PokemonDetailsCard(pokemon: correctPokemon)),
-          ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                color: streakBackgroundColor,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.local_fire_department, color: streakIconColor),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Current Streak: $streak',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: streakTextColor,
+                    ),
+                  ),
+                ],
+              ),
+            ),
 
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed:
-                  currentRound < totalRounds ? onNextRound : onViewResults,
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                backgroundColor:
-                    currentRound < totalRounds
-                        ? theme
-                            .colorScheme
-                            .primary // This should be fine for both themes as it's the primary action
-                        : buttonViewResultsBackgroundColor,
+            const SizedBox(height: 30),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              decoration: BoxDecoration(
+                color: resultMessageBackgroundColor,
+                borderRadius: BorderRadius.circular(10),
               ),
               child: Text(
-                currentRound < totalRounds ? 'Next Round' : 'View Results',
-                style: const TextStyle(fontSize: 18),
+                isCorrect
+                    ? 'You caught it! 🎉'
+                    : 'Oops! It was ${_formatPokemonName(correctPokemon.name)} 😅',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: resultMessageTextColor,
+                ),
               ),
             ),
-          ),
-        ],
+
+            const SizedBox(height: 20),
+
+            Center(child: PokemonDetailsCard(pokemon: correctPokemon)),
+
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed:
+                    currentRound < totalRounds ? onNextRound : onViewResults,
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  backgroundColor:
+                      currentRound < totalRounds
+                          ? theme
+                              .colorScheme
+                              .primary // This should be fine for both themes as it's the primary action
+                          : buttonViewResultsBackgroundColor,
+                ),
+                child: Text(
+                  currentRound < totalRounds ? 'Next Round' : 'View Results',
+                  style: const TextStyle(fontSize: 18),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
