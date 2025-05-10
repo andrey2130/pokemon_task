@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "475659621745",
+    "project_id": "pokemon-task-791bc",
+    "storage_bucket": "pokemon-task-791bc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:475659621745:android:dc471b44b2ac4b621992d0",
+        "android_client_info": {
+          "package_name": "com.example.pokemon_task"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAF5qKg3eLx13VHlfdfqwu847lIoEU1y9w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
