@@ -21,11 +21,22 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<AuthBlocBloc>(create: (context) => sl<AuthBlocBloc>()),
+        BlocProvider<AuthBlocBloc>(
+          create: (context) {
+            final authBloc = sl<AuthBlocBloc>();
+            authBloc.add(const AuthBlocEvent.initializeAuthState());
+            return authBloc;
+          },
+        ),
       ],
-      child: MaterialApp.router(
-        routerConfig: AppRoute.router,
-        theme: AppTheme.lightTheme,
+      child: Builder(
+        builder: (context) {
+          final authBloc = context.read<AuthBlocBloc>();
+          return MaterialApp.router(
+            routerConfig: AppRoute.getRouter(authBloc),
+            theme: AppTheme.lightTheme,
+          );
+        },
       ),
     );
   }

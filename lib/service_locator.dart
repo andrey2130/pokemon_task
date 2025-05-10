@@ -8,6 +8,11 @@ import 'package:pokemon_task/feature/auth/data/repository/auth_repo_impl.dart';
 import 'package:pokemon_task/feature/auth/domain/repository/auth_repo.dart';
 import 'package:pokemon_task/feature/auth/domain/usecases/register_usecase.dart';
 import 'package:pokemon_task/feature/auth/presentation/bloc/auth_bloc_bloc.dart';
+import 'package:pokemon_task/feature/pokemon/data/datasource/pokemon_remote_datasource.dart';
+import 'package:pokemon_task/feature/pokemon/data/repository/pokemon_repository_impl.dart';
+import 'package:pokemon_task/feature/pokemon/domain/repositories/pokemon_repository.dart';
+import 'package:pokemon_task/feature/pokemon/domain/usecases/get_random_pokemon_usecase.dart';
+import 'package:pokemon_task/feature/pokemon/presentation/bloc/pokemon_game_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -46,5 +51,26 @@ void setupServiceLocator() {
   // - Blocs
   sl.registerFactory<AuthBlocBloc>(
     () => AuthBlocBloc(sl<AuthRepository>(), sl<FirebaseAuth>()),
+  );
+
+  // Pokemon Feature
+  // - DataSources
+  sl.registerSingleton<PokemonRemoteDataSource>(
+    PokemonRemoteDataSourceImpl(sl<Dio>()),
+  );
+
+  // - Repositories
+  sl.registerSingleton<PokemonRepository>(
+    PokemonRepositoryImpl(sl<PokemonRemoteDataSource>()),
+  );
+
+  // - Usecases
+  sl.registerSingleton<GetRandomPokemonUsecase>(
+    GetRandomPokemonUsecase(sl<PokemonRepository>()),
+  );
+
+  // - Blocs
+  sl.registerFactory<PokemonGameBloc>(
+    () => PokemonGameBloc(sl<GetRandomPokemonUsecase>()),
   );
 }
