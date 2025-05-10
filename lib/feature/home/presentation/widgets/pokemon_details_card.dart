@@ -17,7 +17,8 @@ class PokemonDetailsCard extends StatelessWidget {
         CachedNetworkImage(
           imageUrl: pokemon.imageUrl,
           height: 200,
-          placeholder: (context, url) => const CircularProgressIndicator.adaptive(),
+          placeholder:
+              (context, url) => const CircularProgressIndicator.adaptive(),
           errorWidget:
               (context, url, error) =>
                   Icon(Icons.error, color: Theme.of(context).colorScheme.error),
@@ -37,18 +38,12 @@ class PokemonDetailsCard extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             PokemonStatColumn(label: 'HP', value: pokemon.stats.hp),
             PokemonStatColumn(label: 'ATK', value: pokemon.stats.attack),
             PokemonStatColumn(label: 'DEF', value: pokemon.stats.defense),
             PokemonStatColumn(label: 'SPD', value: pokemon.stats.speed),
-          ],
-        ),
-        const SizedBox(height: 12),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
             PokemonStatColumn(
               label: 'SP.ATK',
               value: pokemon.stats.specialAttack,

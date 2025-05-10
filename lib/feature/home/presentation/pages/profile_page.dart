@@ -1,203 +1,225 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:pokemon_task/feature/auth/presentation/bloc/auth_bloc_bloc.dart';
 import 'package:pokemon_task/core/theme/bloc/theme_bloc.dart';
+import 'package:pokemon_task/core/usecase/usecases.dart';
+import 'package:pokemon_task/feature/home/domain/repositories/user_stats_repository.dart';
+import 'package:pokemon_task/feature/home/domain/usecases/get_user_info_usecase.dart';
+import 'package:pokemon_task/feature/home/domain/usecases/get_user_stats_stream_usecase.dart';
+import 'package:pokemon_task/service_locator.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
-    final email = user?.email ?? 'user@example.com';
-    final displayName = user?.displayName ?? 'User';
+    final getUserInfo = sl<GetUserInfoUseCase>();
+    final getUserStats = sl<GetUserStatsStreamUseCase>();
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Profile')),
-      body: StreamBuilder<DocumentSnapshot>(
-        stream:
-            FirebaseFirestore.instance
-                .collection('users')
-                .doc(user?.uid)
-                .snapshots(),
-        builder: (context, snapshot) {
-          int bestStreak = 0;
-          int gamesPlayed = 0;
-          int correctAnswers = 0;
-          int totalAnswers = 0;
-          int dailyStreak = 0;
-          int currentStreak = 0;
+    return FutureBuilder<UserBasicInfo?>(
+      future: getUserInfo(const NoParams()),
+      builder: (context, userSnapshot) {
+        if (userSnapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator.adaptive()),
+          );
+        }
 
-          if (snapshot.hasData && snapshot.data!.exists) {
-            final userData = snapshot.data!.data() as Map<String, dynamic>;
-            bestStreak = userData['bestStreak'] ?? 0;
-            gamesPlayed = userData['gamesPlayed'] ?? 0;
-            correctAnswers = userData['correctAnswers'] ?? 0;
-            totalAnswers = userData['totalAnswers'] ?? 0;
-            dailyStreak = userData['dailyStreak'] ?? 0;
-            currentStreak = userData['currentStreak'] ?? 0;
-          }
+        final userInfo = userSnapshot.data;
+        if (userInfo == null) {
+          return const Scaffold(
+            body: Center(child: Text('Not able to load user data')),
+          );
+        }
 
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    displayName,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    email,
-                    style: const TextStyle(fontSize: 16, color: Colors.grey),
-                  ),
+        return Scaffold(
+          appBar: AppBar(title: const Text('Profile')),
+          body: FutureBuilder<Stream<UserStats?>>(
+            future: getUserStats(const NoParams()),
+            builder: (context, streamSnapshot) {
+              if (!streamSnapshot.hasData) {
+                return const Center(
+                  child: CircularProgressIndicator.adaptive(),
+                );
+              }
 
-                  // Show the total score of the user
-                  const Divider(),
-                  const SizedBox(height: 20),
-                  const Text(
-                    'Game Statistics',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 20),
+              return StreamBuilder<UserStats?>(
+                stream: streamSnapshot.data,
+                builder: (context, statsSnapshot) {
+                  UserStats stats = statsSnapshot.data ?? UserStats();
 
-                  // Game statistics
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      _buildStatCard(
-                        context,
-                        'Current Streak',
-                        currentStreak.toString(),
-                        Icons.local_fire_department,
-                        Colors.deepOrange,
-                      ),
-                      _buildStatCard(
-                        context,
-                        'Best Streak',
-                        bestStreak.toString(),
-                        Icons.emoji_events,
-                        Colors.orange,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      _buildStatCard(
-                        context,
-                        'Daily Streak',
-                        dailyStreak.toString(),
-                        Icons.calendar_today,
-                        Colors.purple,
-                      ),
-                      _buildStatCard(
-                        context,
-                        'Games Played',
-                        gamesPlayed.toString(),
-                        Icons.videogame_asset,
-                        Colors.blueAccent,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      _buildStatCard(
-                        context,
-                        'Correct Answers',
-                        correctAnswers.toString(),
-                        Icons.check_circle,
-                        Colors.green,
-                      ),
-                      if (totalAnswers > 0)
-                        _buildStatCard(
-                          context,
-                          'Accuracy',
-                          '${((correctAnswers / totalAnswers) * 100).toStringAsFixed(1)}%',
-                          Icons.analytics,
-                          Colors.teal,
-                        ),
-                      if (totalAnswers == 0)
-                        _buildStatCard(
-                          context,
-                          'Accuracy',
-                          '0%',
-                          Icons.analytics,
-                          Colors.teal,
-                        ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  const Divider(),
-                  const SizedBox(height: 10),
-
-                  // Theme toggle switch
-                  BlocBuilder<ThemeBloc, ThemeState>(
-                    builder: (context, themeState) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  return Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            'Dark Mode',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color:
-                                  Theme.of(context).textTheme.bodyLarge?.color,
+                            userInfo.displayName,
+                            style: const TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Switch.adaptive(
-                            value: themeState.themeMode == AppThemeMode.dark,
-                            onChanged: (value) {
-                              context.read<ThemeBloc>().add(
-                                const ThemeEvent.toggleTheme(),
+                          const SizedBox(height: 10),
+                          Text(
+                            userInfo.email,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey,
+                            ),
+                          ),
+
+                          // Show the total score of the user
+                          const Divider(),
+                          const SizedBox(height: 20),
+                          const Text(
+                            'Game Statistics',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+
+                          // Game statistics
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              _buildStatCard(
+                                context,
+                                'Current Streak',
+                                stats.currentStreak.toString(),
+                                Icons.local_fire_department,
+                                Colors.deepOrange,
+                              ),
+                              _buildStatCard(
+                                context,
+                                'Best Streak',
+                                stats.bestStreak.toString(),
+                                Icons.emoji_events,
+                                Colors.orange,
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              _buildStatCard(
+                                context,
+                                'Daily Streak',
+                                stats.dailyStreak.toString(),
+                                Icons.calendar_today,
+                                Colors.purple,
+                              ),
+                              _buildStatCard(
+                                context,
+                                'Games Played',
+                                stats.gamesPlayed.toString(),
+                                Icons.videogame_asset,
+                                Colors.blueAccent,
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              _buildStatCard(
+                                context,
+                                'Correct Answers',
+                                stats.correctAnswers.toString(),
+                                Icons.check_circle,
+                                Colors.green,
+                              ),
+                              if (stats.totalAnswers > 0)
+                                _buildStatCard(
+                                  context,
+                                  'Accuracy',
+                                  '${((stats.correctAnswers / stats.totalAnswers) * 100).toStringAsFixed(1)}%',
+                                  Icons.analytics,
+                                  Colors.teal,
+                                ),
+                              if (stats.totalAnswers == 0)
+                                _buildStatCard(
+                                  context,
+                                  'Accuracy',
+                                  '0%',
+                                  Icons.analytics,
+                                  Colors.teal,
+                                ),
+                            ],
+                          ),
+                          const SizedBox(height: 20),
+                          const Divider(),
+                          const SizedBox(height: 10),
+
+                          // Theme toggle switch
+                          BlocBuilder<ThemeBloc, ThemeState>(
+                            builder: (context, themeState) {
+                              return Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Dark Mode',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      color:
+                                          Theme.of(
+                                            context,
+                                          ).textTheme.bodyLarge?.color,
+                                    ),
+                                  ),
+                                  Switch.adaptive(
+                                    value:
+                                        themeState.themeMode ==
+                                        AppThemeMode.dark,
+                                    onChanged: (value) {
+                                      context.read<ThemeBloc>().add(
+                                        const ThemeEvent.toggleTheme(),
+                                      );
+                                    },
+                                  ),
+                                ],
                               );
                             },
                           ),
+
+                          const SizedBox(height: 10),
+                          const Divider(),
+                          const SizedBox(height: 20),
+
+                          // Exit button (using TextButton for less emphasis than ElevatedButton)
+                          TextButton(
+                            onPressed: () {
+                              context.read<AuthBlocBloc>().add(
+                                const AuthBlocEvent.signOut(),
+                              );
+                              // Optionally, navigate to login or show a confirmation
+                            },
+                            child: const Text(
+                              'Sign Out',
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
                         ],
-                      );
-                    },
-                  ),
-
-                  const SizedBox(height: 10),
-                  const Divider(),
-                  const SizedBox(height: 20),
-
-                  // Exit button (using TextButton for less emphasis than ElevatedButton)
-                  TextButton(
-                    onPressed: () {
-                      context.read<AuthBlocBloc>().add(
-                        const AuthBlocEvent.signOut(),
-                      );
-                      // Optionally, navigate to login or show a confirmation
-                    },
-                    child: const Text(
-                      'Sign Out',
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
+                  );
+                },
+              );
+            },
+          ),
+        );
+      },
     );
   }
 

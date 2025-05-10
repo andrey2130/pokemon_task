@@ -141,7 +141,7 @@ class ResultWidget extends StatelessWidget {
             const SizedBox(height: 20),
 
             Center(child: PokemonDetailsCard(pokemon: correctPokemon)),
-
+            const SizedBox(height: 20),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(

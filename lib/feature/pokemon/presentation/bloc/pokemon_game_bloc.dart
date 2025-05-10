@@ -2,14 +2,13 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:bloc/bloc.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:pokemon_task/feature/leaderboard/presentation/bloc/leaderboard_bloc.dart';
-import 'package:pokemon_task/feature/leaderboard/presentation/bloc/leaderboard_event.dart';
 import 'package:pokemon_task/feature/pokemon/domain/entities/game_result.dart';
 import 'package:pokemon_task/feature/pokemon/domain/entities/pokemon_entity.dart';
 import 'package:pokemon_task/feature/pokemon/domain/params/game_options_params.dart';
+import 'package:pokemon_task/feature/pokemon/domain/usecases/calculate_score_usecase.dart';
 import 'package:pokemon_task/feature/pokemon/domain/usecases/get_random_pokemon_usecase.dart';
+import 'package:pokemon_task/feature/pokemon/domain/usecases/update_leaderboard_usecase.dart';
 
 part 'pokemon_game_event.dart';
 part 'pokemon_game_state.dart';
@@ -17,20 +16,18 @@ part 'pokemon_game_bloc.freezed.dart';
 
 class PokemonGameBloc extends Bloc<PokemonGameEvent, PokemonGameState> {
   final GetRandomPokemonUsecase _getRandomPokemonUsecase;
-  final LeaderboardBloc? _leaderboardBloc;
-  final FirebaseAuth _auth;
+  final CalculateScoreUsecase _calculateScoreUsecase;
+  final UpdateLeaderboardUsecase _updateLeaderboardUsecase;
 
   // For tracking the timer
   Timer? _gameTimer;
   int _secondsElapsed = 0;
 
   PokemonGameBloc(
-    this._getRandomPokemonUsecase, {
-    LeaderboardBloc? leaderboardBloc,
-    FirebaseAuth? auth,
-  }) : _leaderboardBloc = leaderboardBloc,
-       _auth = auth ?? FirebaseAuth.instance,
-       super(const PokemonGameState.initial()) {
+    this._getRandomPokemonUsecase,
+    this._calculateScoreUsecase,
+    this._updateLeaderboardUsecase,
+  ) : super(const PokemonGameState.initial()) {
     on<StartGame>(_onStartGame);
     on<MakeGuess>(_onMakeGuess);
     on<StartNewRound>(_onStartNewRound);
@@ -117,11 +114,15 @@ class PokemonGameBloc extends Bloc<PokemonGameEvent, PokemonGameState> {
       timeSpent: _secondsElapsed,
     );
 
-    // Calculate the score
-    final score = _calculateScore(isCorrect, _secondsElapsed);
+    // Calculate the score using the dedicated use case
+    final score = await _calculateScoreUsecase.call2(
+      isCorrect: isCorrect,
+      timeSpent: _secondsElapsed,
+      streak: currentState.streak,
+    );
 
-    // Update the user's score in the leaderboard if there is a leaderboard bloc and the user is authenticated
-    _updateLeaderboard(isCorrect, score);
+    // Update the leaderboard using the dedicated use case
+    await _updateLeaderboardUsecase.call2(isCorrect: isCorrect, score: score);
 
     emit(PokemonGameState.result(result: result, streak: newStreak));
   }
@@ -169,42 +170,5 @@ class PokemonGameBloc extends Bloc<PokemonGameEvent, PokemonGameState> {
     final currentState = state as InProgress;
 
     emit(currentState.copyWith(secondsLeft: currentState.secondsLeft - 1));
-  }
-
-  // Method for calculating the score
-  int _calculateScore(bool isCorrect, int timeSpent) {
-    if (!isCorrect) return 0;
-
-    // Base score for correct answer
-    int baseScore = 100;
-
-    // The faster the answer, the more points (max 100 additional points)
-    int timeBonus = max(0, 100 - (timeSpent * 5));
-
-    // Streak gives additional bonus
-    int streakBonus = 0;
-    if (state is InProgress) {
-      final currentState = state as InProgress;
-      streakBonus = currentState.streak * 10; // 10 score per streak
-    }
-
-    return baseScore + timeBonus + streakBonus;
-  }
-
-  // Method for updating the leaderboard
-  void _updateLeaderboard(bool isCorrect, int score) {
-    if (_leaderboardBloc == null) return;
-
-    final currentUser = _auth.currentUser;
-    if (currentUser == null) return;
-
-    _leaderboardBloc.add(
-      LeaderboardEvent.updateUserScore(
-        userId: currentUser.uid,
-        name: currentUser.displayName ?? 'Player',
-        scoreToAdd: score,
-        isCorrectAnswer: isCorrect,
-      ),
-    );
   }
 }

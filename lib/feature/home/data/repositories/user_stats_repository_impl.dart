@@ -74,4 +74,38 @@ class UserStatsRepositoryImpl implements UserStatsRepository {
       debugPrint('Error saving completed game stats: $e');
     }
   }
+
+  @override
+  Future<UserBasicInfo?> getCurrentUserInfo() async {
+    final user = _auth.currentUser;
+    if (user == null) return null;
+
+    return UserBasicInfo(
+      uid: user.uid,
+      email: user.email ?? '',
+      displayName: user.displayName ?? 'User',
+    );
+  }
+
+  @override
+  Future<Stream<UserStats?>> getUserStatsStream() async {
+    final user = _auth.currentUser;
+    if (user == null) return Stream.value(null);
+
+    return _firestore.collection('users').doc(user.uid).snapshots().map((
+      snapshot,
+    ) {
+      if (!snapshot.exists) return UserStats();
+
+      final data = snapshot.data() as Map<String, dynamic>;
+      return UserStats(
+        bestStreak: data['bestStreak'] ?? 0,
+        gamesPlayed: data['gamesPlayed'] ?? 0,
+        correctAnswers: data['correctAnswers'] ?? 0,
+        totalAnswers: data['totalAnswers'] ?? 0,
+        dailyStreak: data['dailyStreak'] ?? 0,
+        currentStreak: data['currentStreak'] ?? 0,
+      );
+    });
+  }
 }
