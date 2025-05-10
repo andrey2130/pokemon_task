@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:pokemon_task/feature/home/presentation/pages/home_page.dart';
-import 'package:pokemon_task/feature/home/presentation/pages/profile_page.dart';
+import 'package:pokemon_task/feature/game/presentation/pages/home_page.dart';
+import 'package:pokemon_task/feature/game/presentation/pages/profile_page.dart';
 import 'package:pokemon_task/feature/leaderboard/presentation/bloc/leaderboard_bloc.dart';
 import 'package:pokemon_task/feature/leaderboard/presentation/pages/leaderboard_page.dart';
-import 'package:pokemon_task/feature/home/presentation/widgets/nav_bar_hider.dart';
+import 'package:pokemon_task/feature/game/presentation/widgets/nav_bar_hider.dart';
 
 class MainNavigationPage extends StatefulWidget {
   const MainNavigationPage({super.key});
@@ -24,7 +24,7 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
   void initState() {
     super.initState();
     _pages = [
-      const HomePage(),
+      const GamePage(),
       BlocProvider<LeaderboardBloc>(
         create: (context) => GetIt.instance<LeaderboardBloc>(),
         child: const LeaderboardPage(),

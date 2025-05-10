@@ -18,21 +18,21 @@ import 'package:pokemon_task/feature/leaderboard/domain/usecases/get_top_scores.
 import 'package:pokemon_task/feature/leaderboard/domain/usecases/get_top_streaks.dart';
 import 'package:pokemon_task/feature/leaderboard/domain/usecases/update_user_score.dart';
 import 'package:pokemon_task/feature/leaderboard/presentation/bloc/leaderboard_bloc.dart';
-import 'package:pokemon_task/feature/pokemon/data/datasource/pokemon_remote_datasource.dart';
-import 'package:pokemon_task/feature/pokemon/data/datasource/user_datasource.dart';
-import 'package:pokemon_task/feature/pokemon/data/repository/pokemon_repository_impl.dart';
-import 'package:pokemon_task/feature/pokemon/data/repository/user_repository_impl.dart';
-import 'package:pokemon_task/feature/pokemon/domain/repositories/pokemon_repository.dart';
-import 'package:pokemon_task/feature/pokemon/domain/repositories/user_repository.dart';
-import 'package:pokemon_task/feature/pokemon/domain/usecases/calculate_score_usecase.dart';
-import 'package:pokemon_task/feature/pokemon/domain/usecases/get_random_pokemon_usecase.dart';
-import 'package:pokemon_task/feature/pokemon/domain/usecases/update_leaderboard_usecase.dart';
-import 'package:pokemon_task/feature/pokemon/presentation/bloc/pokemon_game_bloc.dart';
-import 'package:pokemon_task/feature/home/data/repositories/user_stats_repository_impl.dart';
-import 'package:pokemon_task/feature/home/domain/repositories/user_stats_repository.dart';
+import 'package:pokemon_task/feature/game/data/datasource/pokemon_remote_datasource.dart';
+import 'package:pokemon_task/feature/game/data/datasource/user_datasource.dart';
+import 'package:pokemon_task/feature/game/data/repositories/pokemon_repository_impl.dart';
+import 'package:pokemon_task/feature/game/data/repositories/user_repository_impl.dart';
+import 'package:pokemon_task/feature/game/domain/repositories/pokemon_repository.dart';
+import 'package:pokemon_task/feature/game/domain/repositories/user_repository.dart';
+import 'package:pokemon_task/feature/game/domain/usecases/calculate_score_usecase.dart';
+import 'package:pokemon_task/feature/game/domain/usecases/get_random_pokemon_usecase.dart';
+import 'package:pokemon_task/feature/game/domain/usecases/update_leaderboard_usecase.dart';
+import 'package:pokemon_task/feature/game/presentation/bloc/pokemon_game_bloc.dart';
+import 'package:pokemon_task/feature/game/data/repositories/user_stats_repository_impl.dart';
+import 'package:pokemon_task/feature/game/domain/repositories/user_stats_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:pokemon_task/feature/home/domain/usecases/get_user_info_usecase.dart';
-import 'package:pokemon_task/feature/home/domain/usecases/get_user_stats_stream_usecase.dart';
+import 'package:pokemon_task/feature/game/domain/usecases/get_user_info_usecase.dart';
+import 'package:pokemon_task/feature/game/domain/usecases/get_user_stats_stream_usecase.dart';
 
 final sl = GetIt.instance;
 

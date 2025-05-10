@@ -33,7 +33,6 @@ class CalculateScoreUsecase implements UseCase<int, CalculateScoreParams> {
     return baseScore + timeBonus + streakBonus;
   }
 
-  // Додавання синтаксичного цукру для простішого виклику
   Future<int> call2({
     required bool isCorrect,
     required int timeSpent,

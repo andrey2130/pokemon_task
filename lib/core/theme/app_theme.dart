@@ -7,28 +7,26 @@ class AppTheme {
   static final ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
     colorScheme: ColorScheme.fromSeed(
-      seedColor: const Color(0xFF6F4E37), // Coffee brown as seed color
-      primary: const Color(0xFF8B5A3A), // Darker coffee for primary elements
-      secondary: const Color(0xFFC8A17C), // Lighter coffee/beige for secondary
-      tertiary: const Color(0xFFA57C5B), // Medium coffee for tertiary accents
-      background: const Color(0xFFF5F5DC), // Beige/cream for background
-      surface: const Color(0xFFFFF8E1), // Light cream for surfaces like cards
-      onPrimary: Colors.white, // Text on primary color
-      onSecondary: Colors.black87, // Text on secondary color
-      onBackground: const Color(0xFF3E2723), // Dark brown text on background
-      onSurface: const Color(0xFF3E2723), // Dark brown text on surfaces
+      seedColor: const Color(0xFF6F4E37),
+      primary: const Color(0xFF8B5A3A),
+      secondary: const Color(0xFFC8A17C),
+      tertiary: const Color(0xFFA57C5B),
+      background: const Color(0xFFF5F5DC),
+      surface: const Color(0xFFFFF8E1),
+      onPrimary: Colors.white,
+      onSecondary: Colors.black87,
+      onBackground: const Color(0xFF3E2723),
+      onSurface: const Color(0xFF3E2723),
       brightness: Brightness.light,
-      // Explicitly define error colors for light theme
-      error: Colors.red.shade700, // A distinct red for errors
-      onError: Colors.white, // Text on error color
-      errorContainer:
-          Colors.red.shade100, // Background for error messages/containers
-      onErrorContainer: Colors.red.shade900, // Text on error container
+      error: Colors.red.shade700,
+      onError: Colors.white,
+      errorContainer: Colors.red.shade100,
+      onErrorContainer: Colors.red.shade900,
     ),
-    scaffoldBackgroundColor: const Color(0xFFF5F5DC), // Beige/cream background
+    scaffoldBackgroundColor: const Color(0xFFF5F5DC),
     appBarTheme: AppBarTheme(
-      backgroundColor: const Color(0xFF6F4E37), // Coffee brown app bars
-      foregroundColor: Colors.white, // White text/icons on app bars
+      backgroundColor: const Color(0xFF6F4E37),
+      foregroundColor: Colors.white,
       elevation: 2.0,
       titleTextStyle: const TextStyle(
         fontSize: 20,
@@ -67,14 +65,8 @@ class AppTheme {
         fontWeight: FontWeight.w500,
         color: Color(0xFF3E2723),
       ),
-      bodyLarge: TextStyle(
-        fontSize: 16,
-        color: Color(0xFF4E342E),
-      ), // Slightly lighter brown for body
-      bodyMedium: TextStyle(
-        fontSize: 14,
-        color: Color(0xFF5D4037),
-      ), // Medium brown for less emphasis
+      bodyLarge: TextStyle(fontSize: 16, color: Color(0xFF4E342E)),
+      bodyMedium: TextStyle(fontSize: 14, color: Color(0xFF5D4037)),
       labelLarge: TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.bold,
@@ -83,10 +75,8 @@ class AppTheme {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(
-          0xFF8B5A3A,
-        ), // Darker coffee for button background
-        foregroundColor: Colors.white, // Button text color
+        backgroundColor: const Color(0xFF8B5A3A),
+        foregroundColor: Colors.white,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
         textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
@@ -95,55 +85,44 @@ class AppTheme {
     inputDecorationTheme: InputDecorationTheme(
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8.0),
-        borderSide: const BorderSide(
-          color: Color(0xFFC8A17C),
-        ), // Lighter coffee/beige border
+        borderSide: const BorderSide(color: Color(0xFFC8A17C)),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8.0),
-        borderSide: const BorderSide(
-          color: Color(0xFF6F4E37),
-          width: 2.0,
-        ), // Coffee brown focused border
+        borderSide: const BorderSide(color: Color(0xFF6F4E37), width: 2.0),
       ),
-      labelStyle: const TextStyle(
-        color: Color(0xFF8B5A3A),
-      ), // Darker coffee for label
+      labelStyle: const TextStyle(color: Color(0xFF8B5A3A)),
     ),
     cardTheme: CardTheme(
       elevation: 2.0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-      color: const Color(0xFFFFF8E1), // Light cream for card background
-      surfaceTintColor: const Color(
-        0xFFFFF8E1,
-      ), // Ensure card color is not affected by color scheme tinting
+      color: const Color(0xFFFFF8E1),
+      surfaceTintColor: const Color(0xFFFFF8E1),
     ),
-    // Potentially add a playful font if you have one in your assets
-    // fontFamily: 'PokemonFont',
   );
 
   // Dark theme data.
   static final ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
     colorScheme: ColorScheme.fromSeed(
-      seedColor: const Color(0xFF1E1E1E), // Dark grey as seed color
-      primary: const Color(0xFFBB86FC), // Purple for primary elements
-      secondary: const Color(0xFF03DAC6), // Teal for secondary elements
-      tertiary: const Color(0xFF3700B3), // Darker purple for tertiary accents
-      background: const Color(0xFF121212), // Very dark grey for background
-      surface: const Color(0xFF1E1E1E), // Dark grey for surfaces like cards
-      onPrimary: Colors.black, // Text on primary color
-      onSecondary: Colors.black, // Text on secondary color
-      onBackground: Colors.white, // White text on background
-      onSurface: Colors.white, // White text on surfaces
+      seedColor: const Color(0xFF1E1E1E),
+      primary: const Color(0xFFBB86FC),
+      secondary: const Color(0xFF03DAC6),
+      tertiary: const Color(0xFF3700B3),
+      background: const Color(0xFF121212),
+      surface: const Color(0xFF1E1E1E),
+      onPrimary: Colors.black,
+      onSecondary: Colors.black,
+      onBackground: Colors.white,
+      onSurface: Colors.white,
       brightness: Brightness.dark,
     ),
     scaffoldBackgroundColor: const Color(
       0xFF121212,
     ), // Very dark grey background
     appBarTheme: AppBarTheme(
-      backgroundColor: const Color(0xFF1E1E1E), // Dark grey app bars
-      foregroundColor: Colors.white, // White text/icons on app bars
+      backgroundColor: const Color(0xFF1E1E1E),
+      foregroundColor: Colors.white,
       elevation: 2.0,
       titleTextStyle: const TextStyle(
         fontSize: 20,
@@ -192,10 +171,8 @@ class AppTheme {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(
-          0xFFBB86FC,
-        ), // Purple for button background
-        foregroundColor: Colors.black, // Button text color
+        backgroundColor: const Color(0xFFBB86FC),
+        foregroundColor: Colors.black,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
         textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
@@ -204,25 +181,18 @@ class AppTheme {
     inputDecorationTheme: InputDecorationTheme(
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8.0),
-        borderSide: const BorderSide(
-          color: Colors.white38,
-        ), // Lighter grey border
+        borderSide: const BorderSide(color: Colors.white38),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8.0),
-        borderSide: const BorderSide(
-          color: Color(0xFFBB86FC), // Purple focused border
-          width: 2.0,
-        ),
+        borderSide: const BorderSide(color: Color(0xFFBB86FC), width: 2.0),
       ),
-      labelStyle: const TextStyle(
-        color: Colors.white70,
-      ), // Lighter grey for label
+      labelStyle: const TextStyle(color: Colors.white70),
     ),
     cardTheme: CardTheme(
       elevation: 2.0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-      color: const Color(0xFF1E1E1E), // Dark grey for card background
+      color: const Color(0xFF1E1E1E),
       surfaceTintColor: const Color(0xFF1E1E1E),
     ),
     dividerTheme: const DividerThemeData(color: Colors.white38, thickness: 1),
@@ -231,27 +201,24 @@ class AppTheme {
         Set<WidgetState> states,
       ) {
         if (states.contains(WidgetState.selected)) {
-          return const Color(0xFFBB86FC); // Purple when selected
+          return const Color(0xFFBB86FC);
         }
-        return Colors.grey; // Grey when not selected
+        return Colors.grey;
       }),
       trackColor: WidgetStateProperty.resolveWith<Color?>((
         Set<WidgetState> states,
       ) {
         if (states.contains(WidgetState.selected)) {
-          return const Color(
-            0xFFBB86FC,
-          ).withOpacity(0.5); // Lighter purple track
+          return const Color(0xFFBB86FC).withOpacity(0.5);
         }
-        return Colors.grey.withOpacity(0.5); // Lighter grey track
+        return Colors.grey.withOpacity(0.5);
       }),
     ),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-      backgroundColor: Color(0xFF1E1E1E), // Explicitly set background
-      selectedItemColor: Colors.white, // Teal for selected items
-      unselectedItemColor: Colors.white54, // Lighter grey for unselected items
+      backgroundColor: Color(0xFF1E1E1E),
+      selectedItemColor: Colors.white,
+      unselectedItemColor: Colors.white54,
       selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
-      // unselectedLabelStyle: TextStyle(fontWeight: FontWeight.normal), // Optional: if you want to change unselected label style
     ),
   );
 }

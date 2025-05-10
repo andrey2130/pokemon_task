@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pokemon_task/feature/home/presentation/widgets/pokemon_details_card.dart';
-import 'package:pokemon_task/feature/pokemon/domain/entities/game_result.dart';
+import 'package:pokemon_task/feature/game/presentation/widgets/pokemon_details_card.dart';
+import 'package:pokemon_task/feature/game/domain/entities/game_result.dart';
 
 class ResultWidget extends StatelessWidget {
   final GameResult result;

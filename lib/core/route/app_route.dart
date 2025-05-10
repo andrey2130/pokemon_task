@@ -3,7 +3,7 @@ import 'package:pokemon_task/feature/auth/presentation/bloc/auth_bloc_bloc.dart'
 import 'package:pokemon_task/feature/auth/presentation/pages/login_page.dart';
 import 'package:pokemon_task/feature/auth/presentation/pages/register_page.dart';
 import 'package:flutter/material.dart';
-import 'package:pokemon_task/feature/home/presentation/pages/main_navigation_page.dart';
+import 'package:pokemon_task/feature/game/presentation/pages/main_navigation_page.dart';
 import 'package:pokemon_task/feature/leaderboard/presentation/pages/leaderboard_page.dart';
 import 'package:pokemon_task/feature/leaderboard/presentation/bloc/leaderboard_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

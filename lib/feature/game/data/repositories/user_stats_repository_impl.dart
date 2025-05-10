@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:pokemon_task/feature/home/domain/repositories/user_stats_repository.dart';
+import 'package:pokemon_task/feature/game/domain/repositories/user_stats_repository.dart';
 
 class UserStatsRepositoryImpl implements UserStatsRepository {
   final FirebaseFirestore _firestore;

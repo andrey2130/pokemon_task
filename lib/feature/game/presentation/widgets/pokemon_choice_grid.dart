@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pokemon_task/feature/pokemon/domain/entities/pokemon_entity.dart';
-import 'package:pokemon_task/feature/pokemon/presentation/bloc/pokemon_game_bloc.dart';
+import 'package:pokemon_task/feature/game/domain/entities/pokemon_entity.dart';
+import 'package:pokemon_task/feature/game/presentation/bloc/pokemon_game_bloc.dart';
 
 class PokemonChoiceGrid extends StatelessWidget {
   final List<PokemonEntity> pokemons;

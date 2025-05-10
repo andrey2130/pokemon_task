@@ -3,24 +3,24 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pokemon_task/feature/home/data/repositories/user_stats_repository_impl.dart';
-import 'package:pokemon_task/feature/home/domain/repositories/user_stats_repository.dart';
-import 'package:pokemon_task/feature/home/presentation/widgets/game_finished_widget.dart';
-import 'package:pokemon_task/feature/home/presentation/widgets/game_widget.dart';
-import 'package:pokemon_task/feature/home/presentation/widgets/result_widget.dart';
-import 'package:pokemon_task/feature/home/presentation/widgets/start_widget.dart';
-import 'package:pokemon_task/feature/pokemon/presentation/bloc/pokemon_game_bloc.dart';
+import 'package:pokemon_task/feature/game/data/repositories/user_stats_repository_impl.dart';
+import 'package:pokemon_task/feature/game/domain/repositories/user_stats_repository.dart';
+import 'package:pokemon_task/feature/game/presentation/widgets/game_finished_widget.dart';
+import 'package:pokemon_task/feature/game/presentation/widgets/game_widget.dart';
+import 'package:pokemon_task/feature/game/presentation/widgets/result_widget.dart';
+import 'package:pokemon_task/feature/game/presentation/widgets/start_widget.dart';
+import 'package:pokemon_task/feature/game/presentation/bloc/pokemon_game_bloc.dart';
 import 'package:pokemon_task/service_locator.dart';
-import 'package:pokemon_task/feature/home/presentation/widgets/nav_bar_hider.dart';
+import 'package:pokemon_task/feature/game/presentation/widgets/nav_bar_hider.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class GamePage extends StatefulWidget {
+  const GamePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<GamePage> createState() => _GamePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _GamePageState extends State<GamePage> {
   int _currentRound = 0;
   int _totalCorrectAnswers = 0;
   final int _totalRounds = 10;

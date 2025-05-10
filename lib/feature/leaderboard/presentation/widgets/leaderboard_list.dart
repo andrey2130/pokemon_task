@@ -56,9 +56,9 @@ class LeaderboardList extends StatelessWidget {
 
   Widget _buildRank(int index) {
     final rankColors = [
-      Colors.amber, // Gold
-      Colors.grey.shade400, // Silver
-      Colors.brown.shade300, // Bronze
+      Colors.amber,
+      Colors.grey.shade400,
+      Colors.brown.shade300,
     ];
 
     final rankColor = index < 3 ? rankColors[index] : Colors.blue.shade200;

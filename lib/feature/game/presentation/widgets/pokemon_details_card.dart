@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:pokemon_task/feature/home/presentation/widgets/pokemon_stat_column.dart';
-import 'package:pokemon_task/feature/home/presentation/widgets/pokemon_type_badge.dart';
-import 'package:pokemon_task/feature/pokemon/domain/entities/pokemon_entity.dart';
+import 'package:pokemon_task/feature/game/presentation/widgets/pokemon_stat_column.dart';
+import 'package:pokemon_task/feature/game/presentation/widgets/pokemon_type_badge.dart';
+import 'package:pokemon_task/feature/game/domain/entities/pokemon_entity.dart';
 
 class PokemonDetailsCard extends StatelessWidget {
   final PokemonEntity pokemon;

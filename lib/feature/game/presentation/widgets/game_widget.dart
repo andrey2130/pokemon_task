@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pokemon_task/feature/home/presentation/widgets/pokemon_choice_grid.dart';
-import 'package:pokemon_task/feature/home/presentation/widgets/pokemon_silhouette.dart';
-import 'package:pokemon_task/feature/pokemon/domain/entities/pokemon_entity.dart';
+import 'package:pokemon_task/feature/game/presentation/widgets/pokemon_choice_grid.dart';
+import 'package:pokemon_task/feature/game/presentation/widgets/pokemon_silhouette.dart';
+import 'package:pokemon_task/feature/game/domain/entities/pokemon_entity.dart';
 
 class GameWidget extends StatelessWidget {
   final List<PokemonEntity> pokemons;
