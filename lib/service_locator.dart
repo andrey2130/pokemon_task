@@ -13,6 +13,8 @@ import 'package:pokemon_task/feature/pokemon/data/repository/pokemon_repository_
 import 'package:pokemon_task/feature/pokemon/domain/repositories/pokemon_repository.dart';
 import 'package:pokemon_task/feature/pokemon/domain/usecases/get_random_pokemon_usecase.dart';
 import 'package:pokemon_task/feature/pokemon/presentation/bloc/pokemon_game_bloc.dart';
+import 'package:pokemon_task/feature/home/data/repositories/user_stats_repository_impl.dart';
+import 'package:pokemon_task/feature/home/domain/repositories/user_stats_repository.dart';
 
 final sl = GetIt.instance;
 
@@ -21,8 +23,8 @@ void setupServiceLocator() {
   // sl.registerSingleton<DioClient>(DioClient());
 
   // Firebase Services
-  sl.registerSingleton<FirebaseAuth>(FirebaseAuth.instance);
-  sl.registerSingleton<FirebaseFirestore>(FirebaseFirestore.instance);
+  sl.registerLazySingleton<FirebaseFirestore>(() => FirebaseFirestore.instance);
+  sl.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
 
   // Auth Feature
   // - DataSources
@@ -72,5 +74,11 @@ void setupServiceLocator() {
   // - Blocs
   sl.registerFactory<PokemonGameBloc>(
     () => PokemonGameBloc(sl<GetRandomPokemonUsecase>()),
+  );
+
+  // Home Feature
+  // - Repositories
+  sl.registerLazySingleton<UserStatsRepository>(
+    () => UserStatsRepositoryImpl(firestore: sl(), auth: sl()),
   );
 }

@@ -35,12 +35,14 @@ class ProfilePage extends StatelessWidget {
           int bestStreak = 0;
           int gamesPlayed = 0;
           int correctAnswers = 0;
+          int totalAnswers = 0;
 
           if (snapshot.hasData && snapshot.data!.exists) {
             final userData = snapshot.data!.data() as Map<String, dynamic>;
             bestStreak = userData['bestStreak'] ?? 0;
             gamesPlayed = userData['gamesPlayed'] ?? 0;
             correctAnswers = userData['correctAnswers'] ?? 0;
+            totalAnswers = userData['totalAnswers'] ?? 0;
           }
 
           return Padding(
@@ -107,15 +109,15 @@ class ProfilePage extends StatelessWidget {
                         Icons.check_circle,
                         Colors.green,
                       ),
-                      if (gamesPlayed > 0)
+                      if (totalAnswers > 0)
                         _buildStatCard(
                           context,
                           'Accuracy',
-                          '${((correctAnswers / gamesPlayed) * 100).toStringAsFixed(1)}%',
+                          '${((correctAnswers / totalAnswers) * 100).toStringAsFixed(1)}%',
                           Icons.analytics,
                           Colors.purple,
                         ),
-                      if (gamesPlayed == 0)
+                      if (totalAnswers == 0)
                         _buildStatCard(
                           context,
                           'Accuracy',
