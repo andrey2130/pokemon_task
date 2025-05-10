@@ -11,7 +11,7 @@ abstract class PokemonRemoteDataSource {
 class PokemonRemoteDataSourceImpl implements PokemonRemoteDataSource {
   final Dio _dio;
   final String _baseUrl = 'https://pokeapi.co/api/v2';
-  final int _maxPokemonId = 898; // Загальна кількість покемонів в API
+  final int _maxPokemonId = 898; // Total number of pokemons in the API
 
   PokemonRemoteDataSourceImpl(this._dio);
 
@@ -33,7 +33,7 @@ class PokemonRemoteDataSourceImpl implements PokemonRemoteDataSource {
       final random = Random();
       final Set<int> uniqueIds = {};
 
-      // Генеруємо унікальні випадкові ID
+      // Generate unique random IDs
       while (uniqueIds.length < count) {
         final id = random.nextInt(_maxPokemonId) + 1;
         uniqueIds.add(id);
@@ -45,7 +45,7 @@ class PokemonRemoteDataSourceImpl implements PokemonRemoteDataSource {
     }
   }
 
-  // Допоміжний метод для перетворення відповіді API на нашу модель
+  // Helper method to convert the API response to our model
   PokemonEntity _mapResponseToPokemonEntity(Map<String, dynamic> data) {
     final types =
         (data['types'] as List)
@@ -54,7 +54,7 @@ class PokemonRemoteDataSourceImpl implements PokemonRemoteDataSource {
 
     final stats = data['stats'] as List;
 
-    // Створюємо URL для силуету (використовуємо той самий URL, але будемо застосовувати фільтр у UI)
+    // Create the URL for the silhouette (use the same URL, but we will apply the filter in the UI)
     final imageUrl =
         data['sprites']['other']['official-artwork']['front_default'];
 
@@ -63,7 +63,7 @@ class PokemonRemoteDataSourceImpl implements PokemonRemoteDataSource {
       name: data['name'],
       imageUrl: imageUrl,
       silhouetteUrl:
-          imageUrl, // Використовуємо той самий URL, а затемнення робимо через UI
+          imageUrl, // Use the same URL, but we will apply the filter in the UI
       types: types,
       stats: PokemonStatsEntity(
         hp: _findStat(stats, 'hp'),

@@ -10,7 +10,7 @@ import 'package:pokemon_task/service_locator.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  setupServiceLocator(); // Ініціалізуємо ServiceLocator
+  setupServiceLocator();
   runApp(const MyApp());
 }
 

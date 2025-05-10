@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pokemon_task/feature/home/presentation/widgets/pokemon_details_card.dart';
 import 'package:pokemon_task/feature/pokemon/domain/entities/game_result.dart';
 
-/// Widget that displays the result of a guess
 class ResultWidget extends StatelessWidget {
   final GameResult result;
   final int streak;

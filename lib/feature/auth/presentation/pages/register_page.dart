@@ -51,10 +51,9 @@ class _RegisterPageState extends State<RegisterPage> {
         child: BlocConsumer<AuthBlocBloc, AuthBlocState>(
           listener: (context, state) {
             if (state is Authenticated) {
-              // Успішна реєстрація - перенаправляємо на головну сторінку
               context.go('/home');
             } else if (state is Failure) {
-              // Показуємо помилку
+              
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(state.message),
@@ -130,9 +129,8 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                           ],
                         ),
-                        // Показуємо індикатор завантаження, якщо потрібно
                         if (state is Loading)
-                          const Center(child: CircularProgressIndicator()),
+                          const Center(child: CircularProgressIndicator.adaptive()),
                       ],
                     ),
                   ),

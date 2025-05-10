@@ -20,7 +20,7 @@ class PokemonGameBloc extends Bloc<PokemonGameEvent, PokemonGameState> {
   final LeaderboardBloc? _leaderboardBloc;
   final FirebaseAuth _auth;
 
-  // Для відстеження таймера
+  // For tracking the timer
   Timer? _gameTimer;
   int _secondsElapsed = 0;
 
@@ -72,12 +72,12 @@ class PokemonGameBloc extends Bloc<PokemonGameEvent, PokemonGameState> {
     pokemonsResult.fold(
       (failure) => emit(PokemonGameState.error(failure.message)),
       (pokemons) {
-        // Вибираємо випадкового покемона як правильну відповідь
+        // Select a random pokemon as the correct answer
         final random = Random();
         final correctIndex = random.nextInt(pokemons.length);
         final correctPokemon = pokemons[correctIndex];
 
-        // Починаємо таймер
+        // Start the timer
         _startTimer(options.timerSeconds);
 
         emit(
@@ -107,7 +107,7 @@ class PokemonGameBloc extends Bloc<PokemonGameEvent, PokemonGameState> {
         selectedName == correctName ||
         selectedName == correctName.replaceAll('-', ' ');
 
-    // Оновлюємо стрік
+    // Update the streak
     final newStreak = isCorrect ? currentState.streak + 1 : 0;
 
     final result = GameResult(
@@ -117,10 +117,10 @@ class PokemonGameBloc extends Bloc<PokemonGameEvent, PokemonGameState> {
       timeSpent: _secondsElapsed,
     );
 
-    // Розраховуємо кількість балів
+    // Calculate the score
     final score = _calculateScore(isCorrect, _secondsElapsed);
 
-    // Оновлюємо рахунок користувача в лідерборді, якщо є блок лідерборду і користувач авторизований
+    // Update the user's score in the leaderboard if there is a leaderboard bloc and the user is authenticated
     _updateLeaderboard(isCorrect, score);
 
     emit(PokemonGameState.result(result: result, streak: newStreak));
@@ -143,12 +143,12 @@ class PokemonGameBloc extends Bloc<PokemonGameEvent, PokemonGameState> {
     pokemonsResult.fold(
       (failure) => emit(PokemonGameState.error(failure.message)),
       (pokemons) {
-        // Вибираємо випадкового покемона як правильну відповідь
+        // Select a random pokemon as the correct answer
         final random = Random();
         final correctIndex = random.nextInt(pokemons.length);
         final correctPokemon = pokemons[correctIndex];
 
-        // Починаємо таймер
+        // Start the timer
         _startTimer(options.timerSeconds);
 
         emit(
@@ -171,34 +171,34 @@ class PokemonGameBloc extends Bloc<PokemonGameEvent, PokemonGameState> {
     emit(currentState.copyWith(secondsLeft: currentState.secondsLeft - 1));
   }
 
-  // Метод для обчислення кількості балів
+  // Method for calculating the score
   int _calculateScore(bool isCorrect, int timeSpent) {
     if (!isCorrect) return 0;
 
-    // Базова кількість очків за правильну відповідь
+    // Base score for correct answer
     int baseScore = 100;
 
-    // Чим швидше відповідь, тим більше балів (макс 100 додаткових балів)
+    // The faster the answer, the more points (max 100 additional points)
     int timeBonus = max(0, 100 - (timeSpent * 5));
 
-    // Стрік дає додатковий бонус
+    // Streak gives additional bonus
     int streakBonus = 0;
     if (state is InProgress) {
       final currentState = state as InProgress;
-      streakBonus = currentState.streak * 10; // 10 балів за кожен стрік
+      streakBonus = currentState.streak * 10; // 10 score per streak
     }
 
     return baseScore + timeBonus + streakBonus;
   }
 
-  // Метод для оновлення лідерборду
+  // Method for updating the leaderboard
   void _updateLeaderboard(bool isCorrect, int score) {
     if (_leaderboardBloc == null) return;
 
     final currentUser = _auth.currentUser;
     if (currentUser == null) return;
 
-    _leaderboardBloc!.add(
+    _leaderboardBloc.add(
       LeaderboardEvent.updateUserScore(
         userId: currentUser.uid,
         name: currentUser.displayName ?? 'Player',

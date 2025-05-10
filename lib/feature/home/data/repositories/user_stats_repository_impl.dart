@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pokemon_task/feature/home/domain/repositories/user_stats_repository.dart';
 
-/// Implementation of UserStatsRepository that uses Firebase Firestore
 class UserStatsRepositoryImpl implements UserStatsRepository {
   final FirebaseFirestore _firestore;
   final FirebaseAuth _auth;

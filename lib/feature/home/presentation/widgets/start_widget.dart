@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Widget that displays the start game UI
 class StartWidget extends StatelessWidget {
   final int totalRounds;
   final Function() onStartGame;

@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pokemon_task/feature/pokemon/domain/entities/pokemon_entity.dart';
 import 'package:pokemon_task/feature/pokemon/presentation/bloc/pokemon_game_bloc.dart';
 
-/// Widget that displays a grid of pokemon choices for the game
 class PokemonChoiceGrid extends StatelessWidget {
   final List<PokemonEntity> pokemons;
 

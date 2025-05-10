@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:pokemon_task/feature/pokemon/domain/entities/pokemon_entity.dart';
 
-/// Widget that displays a pokemon silhouette for the guessing game
 class PokemonSilhouette extends StatelessWidget {
   final PokemonEntity pokemon;
 

@@ -62,6 +62,7 @@ class LeaderboardTabBar extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Container(
+          constraints: const BoxConstraints.expand(),
           decoration: BoxDecoration(
             color:
                 isSelected
@@ -77,16 +78,14 @@ class LeaderboardTabBar extends StatelessWidget {
                 color: isSelected ? Colors.white : Colors.grey,
                 size: 18,
               ),
-              if (isSelected) ...[
-                const SizedBox(width: 8),
-                Text(
-                  label,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
+              const SizedBox(width: 8),
+              Text(
+                label,
+                style: TextStyle(
+                  color: isSelected ? Colors.white : Colors.transparent,
+                  fontWeight: FontWeight.bold,
                 ),
-              ],
+              ),
             ],
           ),
         ),

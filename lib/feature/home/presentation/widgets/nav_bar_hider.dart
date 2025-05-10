@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Inherited widget that provides methods to show/hide the navigation bar
 class NavBarHider extends InheritedWidget {
   final VoidCallback hideNavBar;
   final VoidCallback showNavBar;

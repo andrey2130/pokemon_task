@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Widget that displays a pokemon stat with label and value
 class PokemonStatColumn extends StatelessWidget {
   final String label;
   final int value;

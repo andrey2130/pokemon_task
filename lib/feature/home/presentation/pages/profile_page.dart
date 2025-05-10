@@ -71,7 +71,7 @@ class ProfilePage extends StatelessWidget {
                     style: const TextStyle(fontSize: 16, color: Colors.grey),
                   ),
 
-                  // Показуємо загальний рахунок користувача
+                  // Show the total score of the user
                   const Divider(),
                   const SizedBox(height: 20),
                   const Text(
@@ -80,7 +80,7 @@ class ProfilePage extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
 
-                  // Статистика гри
+                  // Game statistics
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [

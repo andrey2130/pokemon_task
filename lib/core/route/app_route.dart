@@ -24,18 +24,15 @@ class AppRoute {
         final isLoginRoute = state.matchedLocation == '/login';
         final isRegisterRoute = state.matchedLocation == '/register';
 
-        // Якщо користувач авторизований і намагається відкрити реєстрацію або вхід,
-        // перенаправляємо на домашню сторінку
+        
         if (isAuthenticated && (isLoginRoute || isRegisterRoute)) {
           return '/home';
         }
 
-        // Якщо користувач НЕ авторизований і намагається відкрити захищені маршрути
         if (!isAuthenticated && !isLoginRoute && !isRegisterRoute) {
           return '/login';
         }
 
-        // Дозволяємо продовжити за поточним маршрутом
         return null;
       },
       routes: [
@@ -138,7 +135,6 @@ class AppRoute {
   }
 }
 
-// Допоміжний клас для підписки на події Bloc
 class GoRouterRefreshStream extends ChangeNotifier {
   GoRouterRefreshStream(Stream<dynamic> stream) {
     _subscription = stream.listen((_) => notifyListeners());

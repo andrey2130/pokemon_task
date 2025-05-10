@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pokemon_task/feature/home/data/repositories/user_stats_repository_impl.dart';
@@ -11,7 +12,6 @@ import 'package:pokemon_task/feature/home/presentation/widgets/start_widget.dart
 import 'package:pokemon_task/feature/pokemon/presentation/bloc/pokemon_game_bloc.dart';
 import 'package:pokemon_task/service_locator.dart';
 
-/// Page that hosts the pokemon guessing game
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -42,13 +42,22 @@ class _HomePageState extends State<HomePage> {
       child: BlocConsumer<PokemonGameBloc, PokemonGameState>(
         listener: (context, state) {
           if (state is Result) {
+            debugPrint('[HomePage Listener] State is Result.');
             if (state.result.isCorrect) {
               _totalCorrectAnswers++;
+              debugPrint(
+                '[HomePage Listener] Correct answer! _totalCorrectAnswers incremented to: $_totalCorrectAnswers',
+              );
+            } else {
+              debugPrint('[HomePage Listener] Incorrect answer.');
             }
-
-            if (_currentRound < _totalRounds) {
-              _currentRound++;
-            }
+            debugPrint(
+              '[HomePage Listener] Current round before saving stats: $_currentRound',
+            );
+            debugPrint(
+              '[HomePage Listener] Calling _saveUserStats with streak: ${state.streak}, isCorrect: ${state.result.isCorrect}',
+            );
+            _saveUserStats(state.streak, state.result.isCorrect);
           }
         },
         builder: (context, state) {
@@ -82,12 +91,20 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildBody(BuildContext context, PokemonGameState state) {
     if (state is Initial) {
+      debugPrint(
+        '[HomePage _buildBody] State is Initial. Building StartScreen.',
+      );
       return _buildStartScreen(context);
     } else if (state is Loading) {
+      debugPrint('[HomePage _buildBody] State is Loading.');
       return const Center(child: CircularProgressIndicator());
     } else if (state is Error) {
+      debugPrint('[HomePage _buildBody] State is Error: ${state.message}');
       return Center(child: Text('Error: ${state.message}'));
     } else if (state is InProgress) {
+      debugPrint(
+        '[HomePage _buildBody] State is InProgress. Current round: $_currentRound, Streak: ${state.streak}',
+      );
       _gameStarted = true;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _hideBottomNavigationBar(context);
@@ -102,20 +119,32 @@ class _HomePageState extends State<HomePage> {
         totalRounds: _totalRounds,
       );
     } else if (state is Result) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _saveUserStats(state.streak, state.result.isCorrect);
-      });
+      debugPrint(
+        '[HomePage _buildBody] State is Result. Current round: $_currentRound, Total rounds: $_totalRounds',
+      );
+      debugPrint(
+        '[HomePage _buildBody] Result details: Correct Pokemon: ${state.result.correctPokemon.name}, Selected: ${state.result.selectedName}, IsCorrect: ${state.result.isCorrect}, Streak: ${state.streak}',
+      );
 
       if (_currentRound >= _totalRounds) {
+        debugPrint(
+          '[HomePage _buildBody] Last round completed. Building GameFinishedScreen.',
+        );
         return _buildGameFinishedScreen(context);
       }
 
+      debugPrint(
+        '[HomePage _buildBody] Not the last round. Building ResultWidget for round: $_currentRound',
+      );
       return ResultWidget(
         result: state.result,
         streak: state.streak,
         currentRound: _currentRound,
         totalRounds: _totalRounds,
         onNextRound: () {
+          setState(() {
+            _currentRound++;
+          });
           context.read<PokemonGameBloc>().add(
             const PokemonGameEvent.startNewRound(),
           );
@@ -133,6 +162,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildStartScreen(BuildContext context) {
+    debugPrint(
+      '[HomePage _buildStartScreen] Resetting game state: _currentRound = 0, _totalCorrectAnswers = 0',
+    );
     _currentRound = 0;
     _totalCorrectAnswers = 0;
     _gameStarted = false;
@@ -152,11 +184,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildGameFinishedScreen(BuildContext context) {
+    debugPrint(
+      '[HomePage _buildGameFinishedScreen] Building. Final _totalCorrectAnswers: $_totalCorrectAnswers, _currentRound: $_currentRound',
+    );
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _showBottomNavigationBar(context);
-      if (_currentRound == _totalRounds) {
-        _statsRepository.updateStats(0, false, incrementTotalAnswers: true);
-      }
+
       _saveCompletedGameStats();
     });
 
@@ -187,6 +220,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _saveUserStats(int streak, bool isCorrect) async {
+    debugPrint(
+      '[HomePage _saveUserStats] Attempting to save stats. Streak: $streak, IsCorrect: $isCorrect',
+    );
     await _statsRepository.updateStats(
       streak,
       isCorrect,
@@ -195,6 +231,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _saveCompletedGameStats() async {
+    debugPrint(
+      '[HomePage _saveCompletedGameStats] Attempting to increment games played.',
+    );
     await _statsRepository.incrementGamesPlayed();
   }
 }

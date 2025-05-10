@@ -28,58 +28,51 @@ final sl = GetIt.instance;
 
 void setupServiceLocator() {
   sl.registerSingleton<Dio>(Dio());
-  // sl.registerSingleton<DioClient>(DioClient());
-
-  // Firebase Services
+  
   sl.registerLazySingleton<FirebaseFirestore>(() => FirebaseFirestore.instance);
   sl.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
 
-  // Auth Feature
-  // - DataSources
   sl.registerSingleton<AuthDataSource>(
-    AuthDataSourceImpl(sl<FirebaseAuth>()), // Pass FirebaseAuth instance
+    AuthDataSourceImpl(sl<FirebaseAuth>()),
   );
   sl.registerSingleton<UserDataSource>(
     UserDataSourceImpl(
       sl<FirebaseFirestore>(),
-    ), // Pass FirebaseFirestore instance
+    ), 
   );
 
-  // - Repositories
+
   sl.registerSingleton<AuthRepository>(
     AuthRepoImpl(
       sl<AuthDataSource>(),
       sl<UserDataSource>(),
-    ), // Pass both datasources
+    ), 
   );
 
-  // - Usecases
   sl.registerSingleton<RegisterUsecase>(
-    RegisterUsecase(sl<AuthRepository>()), // Pass AuthRepository instance
+    RegisterUsecase(sl<AuthRepository>()),
   );
 
-  // - Blocs
+
   sl.registerFactory<AuthBlocBloc>(
     () => AuthBlocBloc(sl<AuthRepository>(), sl<FirebaseAuth>()),
   );
 
-  // Pokemon Feature
-  // - DataSources
   sl.registerSingleton<PokemonRemoteDataSource>(
     PokemonRemoteDataSourceImpl(sl<Dio>()),
   );
 
-  // - Repositories
+
   sl.registerSingleton<PokemonRepository>(
     PokemonRepositoryImpl(sl<PokemonRemoteDataSource>()),
   );
 
-  // - Usecases
+
   sl.registerSingleton<GetRandomPokemonUsecase>(
     GetRandomPokemonUsecase(sl<PokemonRepository>()),
   );
 
-  // - Blocs
+
   sl.registerFactory<PokemonGameBloc>(
     () => PokemonGameBloc(
       sl<GetRandomPokemonUsecase>(),
@@ -88,24 +81,22 @@ void setupServiceLocator() {
     ),
   );
 
-  // Home Feature
-  // - Repositories
+ 
   sl.registerLazySingleton<UserStatsRepository>(
     () => UserStatsRepositoryImpl(firestore: sl(), auth: sl()),
   );
 
-  // Leaderboard Feature
-  // - DataSource
+ 
   sl.registerLazySingleton<LeaderboardDataSource>(
     () => FirebaseLeaderboardDataSource(firestore: sl()),
   );
 
-  // - Repositories
+
   sl.registerLazySingleton<LeaderboardRepository>(
     () => LeaderboardRepositoryImpl(sl<LeaderboardDataSource>()),
   );
 
-  // - Usecases
+
   sl.registerLazySingleton<GetTopScores>(
     () => GetTopScores(sl<LeaderboardRepository>()),
   );
@@ -122,7 +113,7 @@ void setupServiceLocator() {
     () => UpdateUserScore(sl<LeaderboardRepository>()),
   );
 
-  // - Blocs
+
   sl.registerFactory<LeaderboardBloc>(
     () => LeaderboardBloc(
       getTopScores: sl<GetTopScores>(),

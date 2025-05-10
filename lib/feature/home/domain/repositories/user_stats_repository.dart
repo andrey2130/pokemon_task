@@ -1,4 +1,3 @@
-/// Repository interface for managing user statistics
 abstract class UserStatsRepository {
   /// Updates user statistics after a guess
   Future<void> updateStats(

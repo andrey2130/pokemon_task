@@ -66,7 +66,6 @@ class FirebaseLeaderboardDataSource implements LeaderboardDataSource {
     required bool isCorrectAnswer,
     required DateTime playedAt,
   }) async {
-    // Реалізація буде перенесена з repository_impl
     final userRef = _firestore.collection(_usersCollection).doc(userId);
 
     // Get the current user data

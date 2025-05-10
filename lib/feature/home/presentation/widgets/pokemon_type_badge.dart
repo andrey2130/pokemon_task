@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Widget that displays a pokemon type as a badge with appropriate color
 class PokemonTypeBadge extends StatelessWidget {
   final String type;
 

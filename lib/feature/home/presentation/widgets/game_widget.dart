@@ -3,7 +3,6 @@ import 'package:pokemon_task/feature/home/presentation/widgets/pokemon_choice_gr
 import 'package:pokemon_task/feature/home/presentation/widgets/pokemon_silhouette.dart';
 import 'package:pokemon_task/feature/pokemon/domain/entities/pokemon_entity.dart';
 
-/// Widget that displays the active game UI
 class GameWidget extends StatelessWidget {
   final List<PokemonEntity> pokemons;
   final PokemonEntity correctPokemon;

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Widget that displays the game finished UI with final score
 class GameFinishedWidget extends StatelessWidget {
   final int correctAnswers;
   final int totalRounds;

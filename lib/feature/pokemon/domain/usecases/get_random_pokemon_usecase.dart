@@ -12,25 +12,25 @@ class GetRandomPokemonUsecase {
   Future<Either<Failure, List<PokemonEntity>>> call(
     GameOptionsParams params,
   ) async {
-    // Отримуємо випадкові ID покемонів
+    // Get random pokemon IDs
     final idsResult = await _repository.getRandomPokemonIds(
       params.optionsCount,
     );
 
     return idsResult.fold((failure) => left(failure), (ids) async {
-      // Завантажуємо всіх покемонів
+      // Load all pokemons
       final pokemonResults = await Future.wait(
         ids.map((id) => _repository.getPokemonById(id)),
       );
 
-      // Перевіряємо чи є помилки
+      // Check if there are any errors
       for (final result in pokemonResults) {
         if (result.isLeft()) {
           return left(result.getLeft().toNullable()!);
         }
       }
 
-      // Отримуємо список покемонів
+      // Get the list of pokemons
       final pokemons =
           pokemonResults
               .map((result) => result.getRight().toNullable()!)

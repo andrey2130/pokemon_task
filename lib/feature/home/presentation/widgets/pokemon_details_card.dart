@@ -4,7 +4,6 @@ import 'package:pokemon_task/feature/home/presentation/widgets/pokemon_stat_colu
 import 'package:pokemon_task/feature/home/presentation/widgets/pokemon_type_badge.dart';
 import 'package:pokemon_task/feature/pokemon/domain/entities/pokemon_entity.dart';
 
-/// Widget that displays detailed information about a pokemon
 class PokemonDetailsCard extends StatelessWidget {
   final PokemonEntity pokemon;
 

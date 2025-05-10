@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-// Defines the application's theme.
 class AppTheme {
-  // Private constructor to prevent instantiation.
   AppTheme._();
 
   // Light theme data.

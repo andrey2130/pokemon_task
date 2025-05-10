@@ -22,7 +22,7 @@ class UserDataSourceImpl implements UserDataSource {
         'createdAt': FieldValue.serverTimestamp(),
       });
     } catch (e) {
-      // Логування помилки
+
       print('Error saving user data: $e');
       rethrow;
     }
@@ -35,7 +35,7 @@ class UserDataSourceImpl implements UserDataSource {
           await _firestore.collection('users').doc(userId).get();
       return docSnapshot.data();
     } catch (e) {
-      // Логування помилки
+
       print('Error getting user data: $e');
       rethrow;
     }
