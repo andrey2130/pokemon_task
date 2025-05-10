@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pokemon_task/feature/home/data/repositories/user_stats_repository_impl.dart';
 import 'package:pokemon_task/feature/home/domain/repositories/user_stats_repository.dart';
-import 'package:pokemon_task/feature/home/presentation/screens/game_finished_screen.dart';
-import 'package:pokemon_task/feature/home/presentation/screens/game_screen.dart';
-import 'package:pokemon_task/feature/home/presentation/screens/result_screen.dart';
-import 'package:pokemon_task/feature/home/presentation/screens/start_screen.dart';
+import 'package:pokemon_task/feature/home/presentation/widgets/game_finished_widget.dart';
+import 'package:pokemon_task/feature/home/presentation/widgets/game_widget.dart';
+import 'package:pokemon_task/feature/home/presentation/widgets/result_widget.dart';
+import 'package:pokemon_task/feature/home/presentation/widgets/start_widget.dart';
 import 'package:pokemon_task/feature/pokemon/presentation/bloc/pokemon_game_bloc.dart';
 import 'package:pokemon_task/service_locator.dart';
 
@@ -93,7 +93,7 @@ class _HomePageState extends State<HomePage> {
         _hideBottomNavigationBar(context);
       });
 
-      return GameScreen(
+      return GameWidget(
         pokemons: state.pokemons,
         correctPokemon: state.correctPokemon,
         secondsLeft: state.secondsLeft,
@@ -110,7 +110,7 @@ class _HomePageState extends State<HomePage> {
         return _buildGameFinishedScreen(context);
       }
 
-      return ResultScreen(
+      return ResultWidget(
         result: state.result,
         streak: state.streak,
         currentRound: _currentRound,
@@ -141,7 +141,7 @@ class _HomePageState extends State<HomePage> {
       _showBottomNavigationBar(context);
     });
 
-    return StartScreen(
+    return StartWidget(
       totalRounds: _totalRounds,
       onStartGame: () {
         _currentRound = 1;
@@ -160,7 +160,7 @@ class _HomePageState extends State<HomePage> {
       _saveCompletedGameStats();
     });
 
-    return GameFinishedScreen(
+    return GameFinishedWidget(
       correctAnswers: _totalCorrectAnswers,
       totalRounds: _totalRounds,
       onPlayAgain: () {

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-/// Screen that displays the game finished UI with final score
-class GameFinishedScreen extends StatelessWidget {
+
+/// Widget that displays the game finished UI with final score
+class GameFinishedWidget extends StatelessWidget {
   final int correctAnswers;
   final int totalRounds;
   final VoidCallback onPlayAgain;
 
-  const GameFinishedScreen({
+  const GameFinishedWidget({
     super.key,
     required this.correctAnswers,
     required this.totalRounds,

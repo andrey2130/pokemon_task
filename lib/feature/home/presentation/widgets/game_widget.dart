@@ -3,8 +3,8 @@ import 'package:pokemon_task/feature/home/presentation/widgets/pokemon_choice_gr
 import 'package:pokemon_task/feature/home/presentation/widgets/pokemon_silhouette.dart';
 import 'package:pokemon_task/feature/pokemon/domain/entities/pokemon_entity.dart';
 
-/// Screen that displays the active game UI
-class GameScreen extends StatelessWidget {
+/// Widget that displays the active game UI
+class GameWidget extends StatelessWidget {
   final List<PokemonEntity> pokemons;
   final PokemonEntity correctPokemon;
   final int secondsLeft;
@@ -12,7 +12,7 @@ class GameScreen extends StatelessWidget {
   final int currentRound;
   final int totalRounds;
 
-  const GameScreen({
+  const GameWidget({
     super.key,
     required this.pokemons,
     required this.correctPokemon,

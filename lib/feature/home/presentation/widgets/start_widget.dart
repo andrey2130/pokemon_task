@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-/// Screen that displays the start game UI
-class StartScreen extends StatelessWidget {
+
+/// Widget that displays the start game UI
+class StartWidget extends StatelessWidget {
   final int totalRounds;
   final Function() onStartGame;
 
-  const StartScreen({
+  const StartWidget({
     super.key,
     required this.totalRounds,
     required this.onStartGame,

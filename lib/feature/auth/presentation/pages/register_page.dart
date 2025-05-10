@@ -46,94 +46,101 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Register')),
-      body: BlocConsumer<AuthBlocBloc, AuthBlocState>(
-        listener: (context, state) {
-          if (state is Authenticated) {
-            // Успішна реєстрація - перенаправляємо на головну сторінку
-            context.go('/home');
-          } else if (state is Failure) {
-            // Показуємо помилку
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-                backgroundColor: Colors.red,
-              ),
-            );
-          }
-        },
-        builder: (context, state) {
-          return SafeArea(
-            child: Form(
-              key: formKey,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 20,
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: BlocConsumer<AuthBlocBloc, AuthBlocState>(
+          listener: (context, state) {
+            if (state is Authenticated) {
+              // Успішна реєстрація - перенаправляємо на головну сторінку
+              context.go('/home');
+            } else if (state is Failure) {
+              // Показуємо помилку
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                  backgroundColor: Colors.red,
                 ),
-                child: Stack(
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+              );
+            }
+          },
+          builder: (context, state) {
+            return SafeArea(
+              child: SingleChildScrollView(
+                child: Form(
+                  key: formKey,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 20,
+                    ),
+                    child: Stack(
                       children: [
-                        Hero(
-                          tag: 'pokemon_logo',
-                          child: Image.asset(
-                            'assets/images/pokemon.png',
-                            height: 150,
-                          ),
-                        ),
-                        const SizedBox(height: 50),
-                        AuthTextField(
-                          controller: nameController,
-                          hintText: 'Name',
-                          validator: FormValidators.username,
-                        ),
-                        const SizedBox(height: 10),
-                        AuthTextField(
-                          controller: emailController,
-                          hintText: 'Email',
-                          validator: FormValidators.email,
-                        ),
-                        const SizedBox(height: 10),
-                        AuthTextField(
-                          controller: passwordController,
-                          hintText: 'Password',
-                          validator: FormValidators.password,
-                          obscureText: true,
-                        ),
-                        const SizedBox(height: 10),
-                        AuthTextField(
-                          controller: confirmPasswordController,
-                          hintText: 'Confirm Password',
-                          validator:
-                              (value) => FormValidators.confirmPassword(
-                                passwordController.text,
-                                value ?? '',
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Hero(
+                              tag: 'pokemon_logo',
+                              child: Image.asset(
+                                'assets/images/pokemon.png',
+                                height: 150,
                               ),
-                          obscureText: true,
+                            ),
+                            const SizedBox(height: 50),
+                            AuthTextField(
+                              controller: nameController,
+                              hintText: 'Name',
+                              validator: FormValidators.username,
+                            ),
+                            const SizedBox(height: 10),
+                            AuthTextField(
+                              controller: emailController,
+                              hintText: 'Email',
+                              validator: FormValidators.email,
+                            ),
+                            const SizedBox(height: 10),
+                            AuthTextField(
+                              controller: passwordController,
+                              hintText: 'Password',
+                              validator: FormValidators.password,
+                              obscureText: true,
+                            ),
+                            const SizedBox(height: 10),
+                            AuthTextField(
+                              controller: confirmPasswordController,
+                              hintText: 'Confirm Password',
+                              validator:
+                                  (value) => FormValidators.confirmPassword(
+                                    passwordController.text,
+                                    value ?? '',
+                                  ),
+                              obscureText: true,
+                            ),
+                            const SizedBox(height: 20),
+                            TextButton(
+                              onPressed: () {
+                                context.pushNamed('/login');
+                              },
+                              child: const Text(
+                                'Already have an account? Login',
+                              ),
+                            ),
+                            AuthButton(
+                              text: 'Register',
+                              onPressed: state is Loading ? () {} : _register,
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 20),
-                        TextButton(
-                          onPressed: () {
-                            context.pushNamed('/login');
-                          },
-                          child: const Text('Already have an account? Login'),
-                        ),
-                        AuthButton(
-                          text: 'Register',
-                          onPressed: state is Loading ? () {} : _register,
-                        ),
+                        // Показуємо індикатор завантаження, якщо потрібно
+                        if (state is Loading)
+                          const Center(child: CircularProgressIndicator()),
                       ],
                     ),
-                    // Показуємо індикатор завантаження, якщо потрібно
-                    if (state is Loading)
-                      const Center(child: CircularProgressIndicator()),
-                  ],
+                  ),
                 ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
