@@ -83,7 +83,6 @@ class FirebaseLeaderboardDataSource implements LeaderboardDataSource {
         'dailyStreak': 1,
         'lastPlayed': playedAt,
         'lastPlayedDay': _formatDateKey(playedAt),
-        'gamesPlayed': 1,
       });
       return;
     }
@@ -145,7 +144,6 @@ class FirebaseLeaderboardDataSource implements LeaderboardDataSource {
       'dailyStreak': dailyStreak,
       'lastPlayed': playedAt,
       'lastPlayedDay': today,
-      'gamesPlayed': FieldValue.increment(1),
     });
   }
 

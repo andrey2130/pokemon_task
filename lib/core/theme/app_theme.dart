@@ -18,6 +18,12 @@ class AppTheme {
       onBackground: const Color(0xFF3E2723), // Dark brown text on background
       onSurface: const Color(0xFF3E2723), // Dark brown text on surfaces
       brightness: Brightness.light,
+      // Explicitly define error colors for light theme
+      error: Colors.red.shade700, // A distinct red for errors
+      onError: Colors.white, // Text on error color
+      errorContainer:
+          Colors.red.shade100, // Background for error messages/containers
+      onErrorContainer: Colors.red.shade900, // Text on error container
     ),
     scaffoldBackgroundColor: const Color(0xFFF5F5DC), // Beige/cream background
     appBarTheme: AppBarTheme(

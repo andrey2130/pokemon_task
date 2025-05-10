@@ -25,6 +25,46 @@ class ResultWidget extends StatelessWidget {
     final correctPokemon = result.correctPokemon;
     final isCorrect = result.isCorrect;
     final theme = Theme.of(context);
+    final isLightTheme = theme.brightness == Brightness.light;
+
+    // Define colors based on theme
+    Color roundInfoBackgroundColor =
+        isLightTheme ? Colors.blue.shade100 : theme.colorScheme.surfaceVariant;
+    Color roundInfoIconColor =
+        isLightTheme
+            ? Colors.blue.shade800
+            : theme.colorScheme.onSurfaceVariant;
+    Color roundInfoTextColor =
+        isLightTheme ? Colors.black87 : theme.colorScheme.onSurfaceVariant;
+
+    Color streakBackgroundColor =
+        isLightTheme
+            ? Colors.amber.shade100
+            : theme.colorScheme.secondaryContainer;
+    Color streakIconColor =
+        isLightTheme ? Colors.orangeAccent : theme.colorScheme.secondary;
+    Color streakTextColor =
+        isLightTheme ? Colors.black87 : theme.colorScheme.onSecondaryContainer;
+
+    Color resultMessageBackgroundColor =
+        isCorrect
+            ? (isLightTheme
+                ? Colors.green.shade100
+                : theme.colorScheme.primaryContainer)
+            : (isLightTheme
+                ? Colors.red.shade100
+                : theme.colorScheme.errorContainer);
+    Color resultMessageTextColor =
+        isCorrect
+            ? (isLightTheme
+                ? Colors.green.shade800
+                : theme.colorScheme.onPrimaryContainer)
+            : (isLightTheme
+                ? Colors.red.shade800
+                : theme.colorScheme.onErrorContainer);
+
+    Color buttonViewResultsBackgroundColor =
+        isLightTheme ? Colors.green : theme.colorScheme.secondary;
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -33,23 +73,20 @@ class ResultWidget extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              color: theme.colorScheme.surfaceVariant,
+              color: roundInfoBackgroundColor,
               borderRadius: BorderRadius.circular(20),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
-                  Icons.sports_score,
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
+                Icon(Icons.sports_score, color: roundInfoIconColor),
                 const SizedBox(width: 8),
                 Text(
                   'Round $currentRound of $totalRounds',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
-                    color: theme.colorScheme.onSurfaceVariant,
+                    color: roundInfoTextColor,
                   ),
                 ),
               ],
@@ -61,23 +98,20 @@ class ResultWidget extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              color: theme.colorScheme.secondaryContainer,
+              color: streakBackgroundColor,
               borderRadius: BorderRadius.circular(20),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
-                  Icons.local_fire_department,
-                  color: theme.colorScheme.secondary,
-                ),
+                Icon(Icons.local_fire_department, color: streakIconColor),
                 const SizedBox(width: 8),
                 Text(
                   'Current Streak: $streak',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
-                    color: theme.colorScheme.onSecondaryContainer,
+                    color: streakTextColor,
                   ),
                 ),
               ],
@@ -88,10 +122,7 @@ class ResultWidget extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
             decoration: BoxDecoration(
-              color:
-                  isCorrect
-                      ? theme.colorScheme.primaryContainer
-                      : theme.colorScheme.errorContainer,
+              color: resultMessageBackgroundColor,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Text(
@@ -101,10 +132,7 @@ class ResultWidget extends StatelessWidget {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color:
-                    isCorrect
-                        ? theme.colorScheme.onPrimaryContainer
-                        : theme.colorScheme.onErrorContainer,
+                color: resultMessageTextColor,
               ),
             ),
           ),
@@ -124,8 +152,10 @@ class ResultWidget extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 backgroundColor:
                     currentRound < totalRounds
-                        ? theme.colorScheme.primary
-                        : theme.colorScheme.secondary,
+                        ? theme
+                            .colorScheme
+                            .primary // This should be fine for both themes as it's the primary action
+                        : buttonViewResultsBackgroundColor,
               ),
               child: Text(
                 currentRound < totalRounds ? 'Next Round' : 'View Results',
