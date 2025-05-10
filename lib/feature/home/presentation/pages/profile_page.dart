@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pokemon_task/feature/auth/presentation/bloc/auth_bloc_bloc.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -36,6 +37,9 @@ class ProfilePage extends StatelessWidget {
           int gamesPlayed = 0;
           int correctAnswers = 0;
           int totalAnswers = 0;
+          int totalScore = 0;
+          int dailyStreak = 0;
+          int currentStreak = 0;
 
           if (snapshot.hasData && snapshot.data!.exists) {
             final userData = snapshot.data!.data() as Map<String, dynamic>;
@@ -43,6 +47,9 @@ class ProfilePage extends StatelessWidget {
             gamesPlayed = userData['gamesPlayed'] ?? 0;
             correctAnswers = userData['correctAnswers'] ?? 0;
             totalAnswers = userData['totalAnswers'] ?? 0;
+            totalScore = userData['score'] ?? 0;
+            dailyStreak = userData['dailyStreak'] ?? 0;
+            currentStreak = userData['currentStreak'] ?? 0;
           }
 
           return Padding(
@@ -51,12 +58,6 @@ class ProfilePage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const CircleAvatar(
-                    radius: 50,
-                    backgroundColor: Colors.blueGrey,
-                    child: Icon(Icons.person, size: 50, color: Colors.white),
-                  ),
-                  const SizedBox(height: 20),
                   Text(
                     displayName,
                     style: const TextStyle(
@@ -69,7 +70,8 @@ class ProfilePage extends StatelessWidget {
                     email,
                     style: const TextStyle(fontSize: 16, color: Colors.grey),
                   ),
-                  const SizedBox(height: 30),
+
+                  // Показуємо загальний рахунок користувача
                   const Divider(),
                   const SizedBox(height: 20),
                   const Text(
@@ -84,10 +86,30 @@ class ProfilePage extends StatelessWidget {
                     children: [
                       _buildStatCard(
                         context,
+                        'Current Streak',
+                        currentStreak.toString(),
+                        Icons.local_fire_department,
+                        Colors.deepOrange,
+                      ),
+                      _buildStatCard(
+                        context,
                         'Best Streak',
                         bestStreak.toString(),
-                        Icons.local_fire_department,
+                        Icons.emoji_events,
                         Colors.orange,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _buildStatCard(
+                        context,
+                        'Daily Streak',
+                        dailyStreak.toString(),
+                        Icons.calendar_today,
+                        Colors.purple,
                       ),
                       _buildStatCard(
                         context,
@@ -115,7 +137,7 @@ class ProfilePage extends StatelessWidget {
                           'Accuracy',
                           '${((correctAnswers / totalAnswers) * 100).toStringAsFixed(1)}%',
                           Icons.analytics,
-                          Colors.purple,
+                          Colors.teal,
                         ),
                       if (totalAnswers == 0)
                         _buildStatCard(
@@ -123,17 +145,10 @@ class ProfilePage extends StatelessWidget {
                           'Accuracy',
                           '0%',
                           Icons.analytics,
-                          Colors.purple,
+                          Colors.teal,
                         ),
                     ],
                   ),
-
-                  const SizedBox(height: 30),
-                  const Divider(),
-                  const SizedBox(height: 20),
-                  _buildSettingsItem(Icons.settings, 'Settings'),
-                  _buildSettingsItem(Icons.help, 'Help'),
-                  _buildSettingsItem(Icons.info, 'About'),
                 ],
               ),
             ),
@@ -178,21 +193,6 @@ class ProfilePage extends StatelessWidget {
               color: color,
             ),
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSettingsItem(IconData icon, String title) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        children: [
-          Icon(icon, color: Colors.blueGrey),
-          const SizedBox(width: 16),
-          Text(title, style: const TextStyle(fontSize: 16)),
-          const Spacer(),
-          const Icon(Icons.arrow_forward_ios, size: 16),
         ],
       ),
     );

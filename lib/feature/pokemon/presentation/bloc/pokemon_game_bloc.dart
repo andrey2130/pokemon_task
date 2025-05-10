@@ -2,7 +2,10 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:bloc/bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:pokemon_task/feature/leaderboard/presentation/bloc/leaderboard_bloc.dart';
+import 'package:pokemon_task/feature/leaderboard/presentation/bloc/leaderboard_event.dart';
 import 'package:pokemon_task/feature/pokemon/domain/entities/game_result.dart';
 import 'package:pokemon_task/feature/pokemon/domain/entities/pokemon_entity.dart';
 import 'package:pokemon_task/feature/pokemon/domain/params/game_options_params.dart';
@@ -14,13 +17,20 @@ part 'pokemon_game_bloc.freezed.dart';
 
 class PokemonGameBloc extends Bloc<PokemonGameEvent, PokemonGameState> {
   final GetRandomPokemonUsecase _getRandomPokemonUsecase;
+  final LeaderboardBloc? _leaderboardBloc;
+  final FirebaseAuth _auth;
 
   // Для відстеження таймера
   Timer? _gameTimer;
   int _secondsElapsed = 0;
 
-  PokemonGameBloc(this._getRandomPokemonUsecase)
-    : super(const PokemonGameState.initial()) {
+  PokemonGameBloc(
+    this._getRandomPokemonUsecase, {
+    LeaderboardBloc? leaderboardBloc,
+    FirebaseAuth? auth,
+  }) : _leaderboardBloc = leaderboardBloc,
+       _auth = auth ?? FirebaseAuth.instance,
+       super(const PokemonGameState.initial()) {
     on<StartGame>(_onStartGame);
     on<MakeGuess>(_onMakeGuess);
     on<StartNewRound>(_onStartNewRound);
@@ -107,6 +117,12 @@ class PokemonGameBloc extends Bloc<PokemonGameEvent, PokemonGameState> {
       timeSpent: _secondsElapsed,
     );
 
+    // Розраховуємо кількість балів
+    final score = _calculateScore(isCorrect, _secondsElapsed);
+
+    // Оновлюємо рахунок користувача в лідерборді, якщо є блок лідерборду і користувач авторизований
+    _updateLeaderboard(isCorrect, score);
+
     emit(PokemonGameState.result(result: result, streak: newStreak));
   }
 
@@ -153,5 +169,42 @@ class PokemonGameBloc extends Bloc<PokemonGameEvent, PokemonGameState> {
     final currentState = state as InProgress;
 
     emit(currentState.copyWith(secondsLeft: currentState.secondsLeft - 1));
+  }
+
+  // Метод для обчислення кількості балів
+  int _calculateScore(bool isCorrect, int timeSpent) {
+    if (!isCorrect) return 0;
+
+    // Базова кількість очків за правильну відповідь
+    int baseScore = 100;
+
+    // Чим швидше відповідь, тим більше балів (макс 100 додаткових балів)
+    int timeBonus = max(0, 100 - (timeSpent * 5));
+
+    // Стрік дає додатковий бонус
+    int streakBonus = 0;
+    if (state is InProgress) {
+      final currentState = state as InProgress;
+      streakBonus = currentState.streak * 10; // 10 балів за кожен стрік
+    }
+
+    return baseScore + timeBonus + streakBonus;
+  }
+
+  // Метод для оновлення лідерборду
+  void _updateLeaderboard(bool isCorrect, int score) {
+    if (_leaderboardBloc == null) return;
+
+    final currentUser = _auth.currentUser;
+    if (currentUser == null) return;
+
+    _leaderboardBloc!.add(
+      LeaderboardEvent.updateUserScore(
+        userId: currentUser.uid,
+        name: currentUser.displayName ?? 'Player',
+        scoreToAdd: score,
+        isCorrectAnswer: isCorrect,
+      ),
+    );
   }
 }
