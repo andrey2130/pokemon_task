@@ -11,6 +11,7 @@ import 'package:pokemon_task/feature/home/presentation/widgets/result_widget.dar
 import 'package:pokemon_task/feature/home/presentation/widgets/start_widget.dart';
 import 'package:pokemon_task/feature/pokemon/presentation/bloc/pokemon_game_bloc.dart';
 import 'package:pokemon_task/service_locator.dart';
+import 'package:pokemon_task/feature/home/presentation/widgets/nav_bar_hider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -235,27 +236,5 @@ class _HomePageState extends State<HomePage> {
       '[HomePage _saveCompletedGameStats] Attempting to increment games played.',
     );
     await _statsRepository.incrementGamesPlayed();
-  }
-}
-
-class NavBarHider extends InheritedWidget {
-  final VoidCallback hideNavBar;
-  final VoidCallback showNavBar;
-
-  const NavBarHider({
-    Key? key,
-    required this.hideNavBar,
-    required this.showNavBar,
-    required Widget child,
-  }) : super(key: key, child: child);
-
-  static NavBarHider? of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<NavBarHider>();
-  }
-
-  @override
-  bool updateShouldNotify(NavBarHider oldWidget) {
-    return hideNavBar != oldWidget.hideNavBar ||
-        showNavBar != oldWidget.showNavBar;
   }
 }
