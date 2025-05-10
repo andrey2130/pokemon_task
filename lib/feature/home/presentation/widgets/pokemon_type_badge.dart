@@ -7,17 +7,22 @@ class PokemonTypeBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final typeColor = _getTypeColor(type);
+    // Determine text color based on the brightness of the type color
+    final textColor =
+        typeColor.computeLuminance() > 0.5 ? Colors.black : Colors.white;
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 4),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       decoration: BoxDecoration(
-        color: _getTypeColor(type),
+        color: typeColor,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Text(
         type.toUpperCase(),
-        style: const TextStyle(
-          color: Colors.white,
+        style: TextStyle(
+          color: textColor, // Dynamically set text color
           fontWeight: FontWeight.bold,
         ),
       ),

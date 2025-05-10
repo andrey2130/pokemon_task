@@ -12,19 +12,28 @@ class PokemonStatColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Column(
       children: [
         Text(
           label,
-          style: const TextStyle(
-            color: Colors.grey,
+          style: TextStyle(
+            color:
+                theme.textTheme.bodySmall?.color ??
+                theme.colorScheme.onSurface.withOpacity(0.7),
             fontWeight: FontWeight.bold,
           ),
         ),
         const SizedBox(height: 4),
         Text(
           value.toString(),
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color:
+                theme.textTheme.titleMedium?.color ??
+                theme.colorScheme.onSurface,
+          ),
         ),
       ],
     );

@@ -18,7 +18,9 @@ class PokemonDetailsCard extends StatelessWidget {
           imageUrl: pokemon.imageUrl,
           height: 200,
           placeholder: (context, url) => const CircularProgressIndicator(),
-          errorWidget: (context, url, error) => const Icon(Icons.error),
+          errorWidget:
+              (context, url, error) =>
+                  Icon(Icons.error, color: Theme.of(context).colorScheme.error),
         ),
         const SizedBox(height: 16),
         Text(

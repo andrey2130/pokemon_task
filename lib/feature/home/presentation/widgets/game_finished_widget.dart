@@ -15,24 +15,31 @@ class GameFinishedWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final score = (correctAnswers / totalRounds * 100).toInt();
+    final theme = Theme.of(context);
 
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text(
+          Text(
             'Game Finished!',
-            style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+              color:
+                  theme.textTheme.displaySmall?.color ??
+                  theme.colorScheme.onSurface,
+            ),
           ),
           const SizedBox(height: 30),
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: Colors.blue.shade50,
+              color: theme.colorScheme.surfaceVariant,
               borderRadius: BorderRadius.circular(15),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: theme.colorScheme.shadow.withOpacity(0.1),
                   blurRadius: 10,
                   offset: const Offset(0, 5),
                 ),
@@ -45,20 +52,28 @@ class GameFinishedWidget extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: _getScoreColor(score),
+                    color: _getScoreColor(context, score),
                   ),
                 ),
                 const SizedBox(height: 15),
                 Text(
                   'Correct Answers: $correctAnswers out of $totalRounds',
-                  style: const TextStyle(fontSize: 18),
+                  style: TextStyle(
+                    fontSize: 18,
+                    color:
+                        theme.textTheme.bodyLarge?.color ??
+                        theme.colorScheme.onSurfaceVariant,
+                  ),
                 ),
                 const SizedBox(height: 30),
                 Text(
                   _getScoreMessage(score),
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 18,
                     fontStyle: FontStyle.italic,
+                    color:
+                        theme.textTheme.bodyMedium?.color ??
+                        theme.colorScheme.onSurfaceVariant,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -70,7 +85,6 @@ class GameFinishedWidget extends StatelessWidget {
             onPressed: onPlayAgain,
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 16),
-              backgroundColor: Colors.green,
             ),
             child: const Text('Play Again', style: TextStyle(fontSize: 18)),
           ),
@@ -93,15 +107,16 @@ class GameFinishedWidget extends StatelessWidget {
   }
 
   /// Returns a color based on the player's score
-  Color _getScoreColor(int score) {
+  Color _getScoreColor(BuildContext context, int score) {
+    final theme = Theme.of(context);
     if (score >= 90) {
-      return Colors.purple;
+      return theme.colorScheme.primary;
     } else if (score >= 70) {
-      return Colors.green.shade700;
+      return theme.colorScheme.secondary;
     } else if (score >= 50) {
-      return Colors.amber.shade700;
+      return theme.colorScheme.tertiary;
     } else {
-      return Colors.red.shade700;
+      return theme.colorScheme.error;
     }
   }
 }

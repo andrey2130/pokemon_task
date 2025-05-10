@@ -27,7 +27,7 @@ class GameWidget extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
-          _buildHeader(streak, secondsLeft),
+          _buildHeader(context, streak, secondsLeft),
           const SizedBox(height: 20),
           Expanded(
             child: Center(child: PokemonSilhouette(pokemon: correctPokemon)),
@@ -44,26 +44,30 @@ class GameWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader(int streak, int secondsLeft) {
+  Widget _buildHeader(BuildContext context, int streak, int secondsLeft) {
+    final theme = Theme.of(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            color: Colors.blue.shade100,
+            color: theme.colorScheme.secondaryContainer,
             borderRadius: BorderRadius.circular(20),
           ),
           child: Row(
             children: [
-              const Icon(
+              Icon(
                 Icons.local_fire_department,
-                color: Colors.orangeAccent,
+                color: theme.colorScheme.secondary,
               ),
               const SizedBox(width: 4),
               Text(
                 'Streak: $streak',
-                style: const TextStyle(fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: theme.colorScheme.onSecondaryContainer,
+                ),
               ),
             ],
           ),
@@ -73,22 +77,33 @@ class GameWidget extends StatelessWidget {
           decoration: BoxDecoration(
             color:
                 secondsLeft < 10
-                    ? Colors.red.shade100
+                    ? theme.colorScheme.errorContainer
                     : secondsLeft < 15
-                    ? Colors.amber.shade100
-                    : Colors.green.shade100,
+                    ? theme.colorScheme.tertiaryContainer
+                    : theme.colorScheme.primaryContainer,
             borderRadius: BorderRadius.circular(20),
           ),
           child: Row(
             children: [
               Icon(
                 Icons.timer,
-                color: secondsLeft < 10 ? Colors.red : Colors.green,
+                color:
+                    secondsLeft < 10
+                        ? theme.colorScheme.error
+                        : theme.colorScheme.primary,
               ),
               const SizedBox(width: 4),
               Text(
                 '$secondsLeft s',
-                style: const TextStyle(fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color:
+                      secondsLeft < 10
+                          ? theme.colorScheme.onErrorContainer
+                          : secondsLeft < 15
+                          ? theme.colorScheme.onTertiaryContainer
+                          : theme.colorScheme.onPrimaryContainer,
+                ),
               ),
             ],
           ),

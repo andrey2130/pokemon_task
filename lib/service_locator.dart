@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
+import 'package:pokemon_task/core/theme/bloc/theme_bloc.dart';
 import 'package:pokemon_task/feature/auth/data/datasource/auth_datasource.dart';
 import 'package:pokemon_task/feature/auth/data/datasource/user_datasource.dart';
 import 'package:pokemon_task/feature/auth/data/repository/auth_repo_impl.dart';
@@ -23,36 +24,28 @@ import 'package:pokemon_task/feature/pokemon/domain/usecases/get_random_pokemon_
 import 'package:pokemon_task/feature/pokemon/presentation/bloc/pokemon_game_bloc.dart';
 import 'package:pokemon_task/feature/home/data/repositories/user_stats_repository_impl.dart';
 import 'package:pokemon_task/feature/home/domain/repositories/user_stats_repository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final sl = GetIt.instance;
 
-void setupServiceLocator() {
+void setupServiceLocator({required SharedPreferences prefs}) {
   sl.registerSingleton<Dio>(Dio());
-  
+
   sl.registerLazySingleton<FirebaseFirestore>(() => FirebaseFirestore.instance);
   sl.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
 
-  sl.registerSingleton<AuthDataSource>(
-    AuthDataSourceImpl(sl<FirebaseAuth>()),
-  );
-  sl.registerSingleton<UserDataSource>(
-    UserDataSourceImpl(
-      sl<FirebaseFirestore>(),
-    ), 
-  );
+  sl.registerLazySingleton<SharedPreferences>(() => prefs);
 
+  sl.registerSingleton<AuthDataSource>(AuthDataSourceImpl(sl<FirebaseAuth>()));
+  sl.registerSingleton<UserDataSource>(
+    UserDataSourceImpl(sl<FirebaseFirestore>()),
+  );
 
   sl.registerSingleton<AuthRepository>(
-    AuthRepoImpl(
-      sl<AuthDataSource>(),
-      sl<UserDataSource>(),
-    ), 
+    AuthRepoImpl(sl<AuthDataSource>(), sl<UserDataSource>()),
   );
 
-  sl.registerSingleton<RegisterUsecase>(
-    RegisterUsecase(sl<AuthRepository>()),
-  );
-
+  sl.registerSingleton<RegisterUsecase>(RegisterUsecase(sl<AuthRepository>()));
 
   sl.registerFactory<AuthBlocBloc>(
     () => AuthBlocBloc(sl<AuthRepository>(), sl<FirebaseAuth>()),
@@ -62,16 +55,13 @@ void setupServiceLocator() {
     PokemonRemoteDataSourceImpl(sl<Dio>()),
   );
 
-
   sl.registerSingleton<PokemonRepository>(
     PokemonRepositoryImpl(sl<PokemonRemoteDataSource>()),
   );
 
-
   sl.registerSingleton<GetRandomPokemonUsecase>(
     GetRandomPokemonUsecase(sl<PokemonRepository>()),
   );
-
 
   sl.registerFactory<PokemonGameBloc>(
     () => PokemonGameBloc(
@@ -81,21 +71,17 @@ void setupServiceLocator() {
     ),
   );
 
- 
   sl.registerLazySingleton<UserStatsRepository>(
     () => UserStatsRepositoryImpl(firestore: sl(), auth: sl()),
   );
 
- 
   sl.registerLazySingleton<LeaderboardDataSource>(
     () => FirebaseLeaderboardDataSource(firestore: sl()),
   );
 
-
   sl.registerLazySingleton<LeaderboardRepository>(
     () => LeaderboardRepositoryImpl(sl<LeaderboardDataSource>()),
   );
-
 
   sl.registerLazySingleton<GetTopScores>(
     () => GetTopScores(sl<LeaderboardRepository>()),
@@ -113,7 +99,6 @@ void setupServiceLocator() {
     () => UpdateUserScore(sl<LeaderboardRepository>()),
   );
 
-
   sl.registerFactory<LeaderboardBloc>(
     () => LeaderboardBloc(
       getTopScores: sl<GetTopScores>(),
@@ -122,4 +107,6 @@ void setupServiceLocator() {
       updateUserScore: sl<UpdateUserScore>(),
     ),
   );
+
+  sl.registerLazySingleton<ThemeBloc>(() => ThemeBloc(sl<SharedPreferences>()));
 }

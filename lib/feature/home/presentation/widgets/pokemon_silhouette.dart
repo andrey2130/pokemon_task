@@ -9,15 +9,16 @@ class PokemonSilhouette extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       width: 250,
       height: 250,
       decoration: BoxDecoration(
-        color: Colors.grey.shade200,
+        color: theme.colorScheme.surfaceVariant,
         shape: BoxShape.circle,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: theme.colorScheme.shadow.withOpacity(0.2),
             blurRadius: 10,
             spreadRadius: 2,
           ),
@@ -31,13 +32,15 @@ class PokemonSilhouette extends StatelessWidget {
               placeholder:
                   (context, url) =>
                       const Center(child: CircularProgressIndicator()),
-              errorWidget: (context, url, error) => const Icon(Icons.error),
+              errorWidget:
+                  (context, url, error) =>
+                      Icon(Icons.error, color: theme.colorScheme.error),
             ),
           ),
           Positioned.fill(
             child: ColorFiltered(
               colorFilter: ColorFilter.mode(
-                Colors.indigo.withOpacity(0.85),
+                theme.colorScheme.primary.withOpacity(0.85),
                 BlendMode.modulate,
               ),
               child: Container(color: Colors.transparent),

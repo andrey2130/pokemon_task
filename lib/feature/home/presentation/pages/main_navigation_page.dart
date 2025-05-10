@@ -64,8 +64,6 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
                 ? BottomNavigationBar(
                   currentIndex: _selectedIndex,
                   onTap: _onItemTapped,
-                  selectedItemColor: Theme.of(context).primaryColor,
-                  unselectedItemColor: Colors.grey,
                   items: const [
                     BottomNavigationBarItem(
                       icon: Icon(Icons.videogame_asset),

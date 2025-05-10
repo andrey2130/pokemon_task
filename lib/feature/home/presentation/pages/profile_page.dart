@@ -2,8 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
+
 import 'package:pokemon_task/feature/auth/presentation/bloc/auth_bloc_bloc.dart';
+import 'package:pokemon_task/core/theme/bloc/theme_bloc.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -15,17 +16,7 @@ class ProfilePage extends StatelessWidget {
     final displayName = user?.displayName ?? 'User';
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.exit_to_app),
-            onPressed: () {
-              context.read<AuthBlocBloc>().add(const AuthBlocEvent.signOut());
-            },
-          ),
-        ],
-      ),
+      appBar: AppBar(title: const Text('Profile')),
       body: StreamBuilder<DocumentSnapshot>(
         stream:
             FirebaseFirestore.instance
@@ -37,7 +28,6 @@ class ProfilePage extends StatelessWidget {
           int gamesPlayed = 0;
           int correctAnswers = 0;
           int totalAnswers = 0;
-          int totalScore = 0;
           int dailyStreak = 0;
           int currentStreak = 0;
 
@@ -47,7 +37,6 @@ class ProfilePage extends StatelessWidget {
             gamesPlayed = userData['gamesPlayed'] ?? 0;
             correctAnswers = userData['correctAnswers'] ?? 0;
             totalAnswers = userData['totalAnswers'] ?? 0;
-            totalScore = userData['score'] ?? 0;
             dailyStreak = userData['dailyStreak'] ?? 0;
             currentStreak = userData['currentStreak'] ?? 0;
           }
@@ -149,6 +138,60 @@ class ProfilePage extends StatelessWidget {
                         ),
                     ],
                   ),
+                  const SizedBox(height: 20),
+                  const Divider(),
+                  const SizedBox(height: 10),
+
+                  // Theme toggle switch
+                  BlocBuilder<ThemeBloc, ThemeState>(
+                    builder: (context, themeState) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Dark Mode',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color:
+                                  Theme.of(context).textTheme.bodyLarge?.color,
+                            ),
+                          ),
+                          Switch.adaptive(
+                            value: themeState.themeMode == AppThemeMode.dark,
+                            onChanged: (value) {
+                              context.read<ThemeBloc>().add(
+                                const ThemeEvent.toggleTheme(),
+                              );
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+
+                  const SizedBox(height: 10),
+                  const Divider(),
+                  const SizedBox(height: 20),
+
+                  // Exit button (using TextButton for less emphasis than ElevatedButton)
+                  TextButton(
+                    onPressed: () {
+                      context.read<AuthBlocBloc>().add(
+                        const AuthBlocEvent.signOut(),
+                      );
+                      // Optionally, navigate to login or show a confirmation
+                    },
+                    child: const Text(
+                      'Sign Out',
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
                 ],
               ),
             ),
