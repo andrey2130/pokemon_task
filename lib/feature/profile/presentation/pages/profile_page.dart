@@ -46,7 +46,7 @@ class ProfilePage extends StatelessWidget {
                           () => context.read<ProfileBloc>().add(
                             const ProfileEvent.loadProfile(),
                           ),
-                      child: const Text('Спробувати знову'),
+                      child: const Text('Try again'),
                     ),
                   ],
                 ),

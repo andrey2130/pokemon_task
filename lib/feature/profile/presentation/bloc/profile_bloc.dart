@@ -69,16 +69,12 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     RefreshProfile event,
     Emitter<ProfileState> emit,
   ) async {
-    // Only allow refresh if already loaded
     if (state is! Loaded) return;
 
-    // Get current loaded user to keep UI state
     final currentUser = (state as Loaded).user;
 
-    // Show light loading state but keep current data
     emit(ProfileState.refreshing(currentUser));
 
-    // Reuse the same load profile logic
     await _onLoadProfile(const LoadProfile(), emit);
   }
 }
