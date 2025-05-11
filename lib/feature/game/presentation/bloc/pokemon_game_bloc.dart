@@ -8,7 +8,7 @@ import 'package:pokemon_task/feature/game/domain/entities/pokemon_entity.dart';
 import 'package:pokemon_task/feature/game/domain/params/game_options_params.dart';
 import 'package:pokemon_task/feature/game/domain/usecases/calculate_score_usecase.dart';
 import 'package:pokemon_task/feature/game/domain/usecases/get_random_pokemon_usecase.dart';
-import 'package:pokemon_task/feature/game/domain/usecases/update_leaderboard_usecase.dart';
+import 'package:pokemon_task/feature/leaderboard/domain/usecases/update_leaderboard_usecase.dart';
 
 part 'pokemon_game_event.dart';
 part 'pokemon_game_state.dart';

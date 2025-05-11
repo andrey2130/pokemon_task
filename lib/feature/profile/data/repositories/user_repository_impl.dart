@@ -1,7 +1,7 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:pokemon_task/core/error_handling/failure.dart';
-import 'package:pokemon_task/feature/game/data/datasource/user_datasource.dart';
-import 'package:pokemon_task/feature/game/domain/repositories/user_repository.dart';
+import 'package:pokemon_task/feature/profile/data/datasource/user_datasource.dart';
+import 'package:pokemon_task/feature/profile/domain/repositories/user_repository.dart';
 
 class UserRepositoryImpl implements UserRepository {
   final UserDataSource _dataSource;

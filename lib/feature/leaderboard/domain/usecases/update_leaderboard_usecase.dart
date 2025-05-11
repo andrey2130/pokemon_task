@@ -1,5 +1,5 @@
 import 'package:pokemon_task/core/usecase/usecases.dart';
-import 'package:pokemon_task/feature/game/domain/repositories/user_repository.dart';
+import 'package:pokemon_task/feature/profile/domain/repositories/user_repository.dart';
 
 class UpdateLeaderboardParams {
   final bool isCorrect;
