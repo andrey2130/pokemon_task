@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pokemon_task/feature/leaderboard/presentation/bloc/leaderboard_bloc.dart';
 import '../../domain/entities/leaderboard_entry.dart';
 
-
 class LeaderboardList extends StatelessWidget {
   final List<LeaderboardEntry> entries;
   final String? currentUserId;
@@ -102,12 +101,12 @@ class LeaderboardList extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.access_time, size: 14, color: Colors.grey.shade600),
-              const SizedBox(width: 4),
+              Icon(Icons.access_time, size: 12, color: Colors.grey.shade600),
+              const SizedBox(width: 2),
               Flexible(
                 child: Text(
-                  'Last played: ${_formatDate(entry.lastPlayed)}',
-                  style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                  'Played: ${_formatDate(entry.lastPlayed)}',
+                  style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -179,14 +178,18 @@ class LeaderboardList extends StatelessWidget {
 
   String _formatDate(DateTime date) {
     final now = DateTime.now();
-    final difference = now.difference(date);
 
-    if (difference.inDays == 0) {
+    // Порівнюємо дати без часу, щоб правильно визначити календарні дні
+    final today = DateTime(now.year, now.month, now.day);
+    final playedDate = DateTime(date.year, date.month, date.day);
+    final differenceInDays = today.difference(playedDate).inDays;
+
+    if (differenceInDays == 0) {
       return 'Today';
-    } else if (difference.inDays == 1) {
+    } else if (differenceInDays == 1) {
       return 'Yesterday';
-    } else if (difference.inDays < 7) {
-      return '${difference.inDays} days ago';
+    } else if (differenceInDays < 7) {
+      return '${differenceInDays} days ago';
     } else {
       return '${date.day}/${date.month}/${date.year}';
     }
