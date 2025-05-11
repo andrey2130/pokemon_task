@@ -72,14 +72,15 @@ class LeaderboardList extends StatelessWidget {
         shape: BoxShape.circle,
         border: Border.all(color: rankColor, width: 2),
       ),
-      child: Center(
-        child: Text(
-          '${index + 1}',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: rankSize,
-            color: rankColor,
-          ),
+      alignment: Alignment.center,
+      child: Text(
+        '${index + 1}',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: rankSize,
+          color: rankColor,
+          height: 1.0, // додає вертикальне центрування
         ),
       ),
     );

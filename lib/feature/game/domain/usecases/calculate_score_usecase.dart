@@ -21,14 +21,11 @@ class CalculateScoreUsecase implements UseCase<int, CalculateScoreParams> {
   Future<int> call(CalculateScoreParams params) async {
     if (!params.isCorrect) return 0;
 
-    // Base score for correct answer
     int baseScore = 100;
 
-    // The faster the answer, the more points (max 100 additional points)
     int timeBonus = max(0, 100 - (params.timeSpent * 5));
 
-    // Streak gives additional bonus
-    int streakBonus = params.streak * 10; // 10 score per streak
+    int streakBonus = params.streak * 10;
 
     return baseScore + timeBonus + streakBonus;
   }

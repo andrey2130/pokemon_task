@@ -1,19 +1,24 @@
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:pokemon_task/core/usecase/usecases.dart';
 import 'package:pokemon_task/feature/auth/domain/params/login_params.dart';
 import 'package:pokemon_task/feature/auth/domain/params/register_params.dart';
-import 'package:pokemon_task/feature/auth/domain/repository/auth_repo.dart';
+
+import 'package:pokemon_task/feature/auth/domain/usecases/login_usecase.dart';
+import 'package:pokemon_task/feature/auth/domain/usecases/logout_usecase.dart';
+import 'package:pokemon_task/feature/auth/domain/usecases/register_usecase.dart';
 
 part 'auth_bloc_event.dart';
 part 'auth_bloc_state.dart';
 part 'auth_bloc_bloc.freezed.dart';
 
 class AuthBlocBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
-  final AuthRepository _authRepository;
-  final FirebaseAuth _firebaseAuth;
+  final LoginUsecase _loginUsecase;
+  final RegisterUsecase _registerUsecase;
+  final LogoutUsecase _logoutUsecase;
 
-  AuthBlocBloc(this._authRepository, this._firebaseAuth)
+  AuthBlocBloc(this._loginUsecase, this._registerUsecase, this._logoutUsecase)
     : super(const AuthBlocState.initial()) {
     on<InitializeAuthState>(_onInitializeAuthState);
     on<Register>(_onRegister);
@@ -27,7 +32,7 @@ class AuthBlocBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
   ) async {
     emit(const AuthBlocState.loading());
 
-    final User? currentUser = _firebaseAuth.currentUser;
+    final User? currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null) {
       emit(const AuthBlocState.authenticated());
     } else {
@@ -38,9 +43,7 @@ class AuthBlocBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
   Future<void> _onRegister(Register event, Emitter<AuthBlocState> emit) async {
     emit(const AuthBlocState.loading());
 
-    final result = await _authRepository.registerWithEmailAndPassword(
-      event.params,
-    );
+    final result = await _registerUsecase(event.params);
 
     result.fold(
       (failure) => emit(AuthBlocState.failure(message: failure.message)),
@@ -51,9 +54,7 @@ class AuthBlocBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
   Future<void> _onSignIn(SignIn event, Emitter<AuthBlocState> emit) async {
     emit(const AuthBlocState.loading());
 
-    final result = await _authRepository.loginWithEmailAndPassword(
-      event.params,
-    );
+    final result = await _loginUsecase(event.params);
 
     result.fold(
       (failure) => emit(AuthBlocState.failure(message: failure.message)),
@@ -64,7 +65,7 @@ class AuthBlocBloc extends Bloc<AuthBlocEvent, AuthBlocState> {
   Future<void> _onSignOut(SignOut event, Emitter<AuthBlocState> emit) async {
     emit(const AuthBlocState.loading());
 
-    await _authRepository.logout();
+    await _logoutUsecase(NoParams());
     emit(const AuthBlocState.unauthenticated());
   }
 }

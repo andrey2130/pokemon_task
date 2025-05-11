@@ -64,7 +64,7 @@ class GameWidget extends StatelessWidget {
 
     if (secondsLeft < 10) {
       timerBackgroundColor =
-          isLightTheme ? Colors.red.shade100 : theme.colorScheme.errorContainer;
+          isLightTheme ? Colors.red.shade300 : theme.colorScheme.errorContainer;
       timerIconColor =
           isLightTheme ? Colors.red.shade700 : theme.colorScheme.error;
       timerTextColor =
@@ -74,7 +74,7 @@ class GameWidget extends StatelessWidget {
     } else if (secondsLeft < 15) {
       timerBackgroundColor =
           isLightTheme
-              ? Colors.amber.shade100
+              ? Colors.amber.shade300
               : theme.colorScheme.tertiaryContainer;
       timerIconColor =
           isLightTheme

@@ -1,22 +1,23 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../domain/usecases/get_top_scores.dart';
-import '../../domain/usecases/get_top_streaks.dart';
-import '../../domain/usecases/get_top_daily_streaks.dart';
-import '../../domain/usecases/update_user_score.dart';
+import '../../domain/usecases/get_top_scores_usecase.dart';
+import '../../domain/usecases/get_top_streaks_usecase.dart';
+import '../../domain/usecases/get_top_daily_streaks_usecase.dart';
+import '../../domain/usecases/update_user_score_usecase.dart';
+import '../../domain/params/leaderboard_params.dart';
 import 'leaderboard_event.dart';
 import 'leaderboard_state.dart';
 
 class LeaderboardBloc extends Bloc<LeaderboardEvent, LeaderboardState> {
-  final GetTopScores getTopScores;
-  final GetTopStreaks getTopStreaks;
-  final GetTopDailyStreaks getTopDailyStreaks;
-  final UpdateUserScore updateUserScore;
+  final GetTopScoresUseCase getTopScoresUseCase;
+  final GetTopStreaksUseCase getTopStreaksUseCase;
+  final GetTopDailyStreaksUseCase getTopDailyStreaksUseCase;
+  final UpdateUserScoreUseCase updateUserScoreUseCase;
 
   LeaderboardBloc({
-    required this.getTopScores,
-    required this.getTopStreaks,
-    required this.getTopDailyStreaks,
-    required this.updateUserScore,
+    required this.getTopScoresUseCase,
+    required this.getTopStreaksUseCase,
+    required this.getTopDailyStreaksUseCase,
+    required this.updateUserScoreUseCase,
   }) : super(const LeaderboardState()) {
     on<LoadTopScores>(_onLoadTopScores);
     on<LoadTopStreaks>(_onLoadTopStreaks);
@@ -37,7 +38,8 @@ class LeaderboardBloc extends Bloc<LeaderboardEvent, LeaderboardState> {
     );
 
     try {
-      final scores = await getTopScores(limit: event.limit);
+      final params = LeaderboardParams(limit: event.limit);
+      final scores = await getTopScoresUseCase(params);
       emit(state.copyWith(topScores: scores, isLoading: false));
     } catch (e) {
       emit(
@@ -62,7 +64,8 @@ class LeaderboardBloc extends Bloc<LeaderboardEvent, LeaderboardState> {
     );
 
     try {
-      final streaks = await getTopStreaks(limit: event.limit);
+      final params = LeaderboardParams(limit: event.limit);
+      final streaks = await getTopStreaksUseCase(params);
       emit(state.copyWith(topStreaks: streaks, isLoading: false));
     } catch (e) {
       emit(
@@ -87,7 +90,8 @@ class LeaderboardBloc extends Bloc<LeaderboardEvent, LeaderboardState> {
     );
 
     try {
-      final dailyStreaks = await getTopDailyStreaks(limit: event.limit);
+      final params = LeaderboardParams(limit: event.limit);
+      final dailyStreaks = await getTopDailyStreaksUseCase(params);
       emit(state.copyWith(topDailyStreaks: dailyStreaks, isLoading: false));
     } catch (e) {
       emit(
@@ -104,13 +108,16 @@ class LeaderboardBloc extends Bloc<LeaderboardEvent, LeaderboardState> {
     Emitter<LeaderboardState> emit,
   ) async {
     try {
-      await updateUserScore(
+      final params = UserScoreParams(
         userId: event.userId,
         name: event.name,
         scoreToAdd: event.scoreToAdd,
         isCorrectAnswer: event.isCorrectAnswer,
+        playedAt: DateTime.now(),
       );
+      await updateUserScoreUseCase(params);
 
+      // After updating, refresh the current tab data
       switch (state.currentTab) {
         case LeaderboardTab.scores:
           add(const LeaderboardEvent.loadTopScores());

@@ -22,12 +22,10 @@ abstract class LeaderboardState with _$LeaderboardState {
   factory LeaderboardState.fromJson(Map<String, dynamic> json) =>
       _$LeaderboardStateFromJson(json);
 
-  // Helper methods to check current state
   bool get isScoresTab => currentTab == LeaderboardTab.scores;
   bool get isStreaksTab => currentTab == LeaderboardTab.streaks;
   bool get isDailyStreaksTab => currentTab == LeaderboardTab.dailyStreaks;
 
-  // Get current data for active tab
   List<LeaderboardEntry> get currentData {
     switch (currentTab) {
       case LeaderboardTab.scores:

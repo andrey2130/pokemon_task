@@ -8,15 +8,17 @@ import 'package:pokemon_task/feature/auth/data/datasource/user_datasource.dart'
     as auth;
 import 'package:pokemon_task/feature/auth/data/repository/auth_repo_impl.dart';
 import 'package:pokemon_task/feature/auth/domain/repository/auth_repo.dart';
+import 'package:pokemon_task/feature/auth/domain/usecases/login_usecase.dart';
+import 'package:pokemon_task/feature/auth/domain/usecases/logout_usecase.dart';
 import 'package:pokemon_task/feature/auth/domain/usecases/register_usecase.dart';
 import 'package:pokemon_task/feature/auth/presentation/bloc/auth_bloc_bloc.dart';
 import 'package:pokemon_task/feature/leaderboard/data/repositories/leaderboard_repository_impl.dart';
 import 'package:pokemon_task/feature/leaderboard/data/datasource/leaderboard_data_source.dart';
 import 'package:pokemon_task/feature/leaderboard/domain/repositories/leaderboard_repository.dart';
-import 'package:pokemon_task/feature/leaderboard/domain/usecases/get_top_daily_streaks.dart';
-import 'package:pokemon_task/feature/leaderboard/domain/usecases/get_top_scores.dart';
-import 'package:pokemon_task/feature/leaderboard/domain/usecases/get_top_streaks.dart';
-import 'package:pokemon_task/feature/leaderboard/domain/usecases/update_user_score.dart';
+import 'package:pokemon_task/feature/leaderboard/domain/usecases/get_top_daily_streaks_usecase.dart';
+import 'package:pokemon_task/feature/leaderboard/domain/usecases/get_top_scores_usecase.dart';
+import 'package:pokemon_task/feature/leaderboard/domain/usecases/get_top_streaks_usecase.dart';
+import 'package:pokemon_task/feature/leaderboard/domain/usecases/update_user_score_usecase.dart';
 import 'package:pokemon_task/feature/leaderboard/presentation/bloc/leaderboard_bloc.dart';
 import 'package:pokemon_task/feature/game/data/datasource/pokemon_remote_datasource.dart';
 import 'package:pokemon_task/feature/game/data/datasource/user_datasource.dart';
@@ -70,17 +72,19 @@ void setupServiceLocator({required SharedPreferences prefs}) {
 
   // UseCases
   sl.registerSingleton<RegisterUsecase>(RegisterUsecase(sl<AuthRepository>()));
-  sl.registerLazySingleton<GetTopScores>(
-    () => GetTopScores(sl<LeaderboardRepository>()),
+  sl.registerSingleton<LoginUsecase>(LoginUsecase(sl<AuthRepository>()));
+  sl.registerSingleton<LogoutUsecase>(LogoutUsecase(sl<AuthRepository>()));
+  sl.registerLazySingleton<GetTopScoresUseCase>(
+    () => GetTopScoresUseCase(sl<LeaderboardRepository>()),
   );
-  sl.registerLazySingleton<GetTopStreaks>(
-    () => GetTopStreaks(sl<LeaderboardRepository>()),
+  sl.registerLazySingleton<GetTopStreaksUseCase>(
+    () => GetTopStreaksUseCase(sl<LeaderboardRepository>()),
   );
-  sl.registerLazySingleton<GetTopDailyStreaks>(
-    () => GetTopDailyStreaks(sl<LeaderboardRepository>()),
+  sl.registerLazySingleton<GetTopDailyStreaksUseCase>(
+    () => GetTopDailyStreaksUseCase(sl<LeaderboardRepository>()),
   );
-  sl.registerLazySingleton<UpdateUserScore>(
-    () => UpdateUserScore(sl<LeaderboardRepository>()),
+  sl.registerLazySingleton<UpdateUserScoreUseCase>(
+    () => UpdateUserScoreUseCase(sl<LeaderboardRepository>()),
   );
   sl.registerSingleton<GetRandomPokemonUsecase>(
     GetRandomPokemonUsecase(sl<PokemonRepository>()),
@@ -95,14 +99,18 @@ void setupServiceLocator({required SharedPreferences prefs}) {
 
   // Blocs
   sl.registerFactory<AuthBlocBloc>(
-    () => AuthBlocBloc(sl<AuthRepository>(), sl<FirebaseAuth>()),
+    () => AuthBlocBloc(
+      sl<LoginUsecase>(),
+      sl<RegisterUsecase>(),
+      sl<LogoutUsecase>(),
+    ),
   );
   sl.registerFactory<LeaderboardBloc>(
     () => LeaderboardBloc(
-      getTopScores: sl<GetTopScores>(),
-      getTopStreaks: sl<GetTopStreaks>(),
-      getTopDailyStreaks: sl<GetTopDailyStreaks>(),
-      updateUserScore: sl<UpdateUserScore>(),
+      getTopScoresUseCase: sl<GetTopScoresUseCase>(),
+      getTopStreaksUseCase: sl<GetTopStreaksUseCase>(),
+      getTopDailyStreaksUseCase: sl<GetTopDailyStreaksUseCase>(),
+      updateUserScoreUseCase: sl<UpdateUserScoreUseCase>(),
     ),
   );
   sl.registerLazySingleton<ThemeBloc>(() => ThemeBloc(sl<SharedPreferences>()));
