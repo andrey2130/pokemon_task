@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/leaderboard_bloc.dart';
-import '../bloc/leaderboard_event.dart';
-import '../bloc/leaderboard_state.dart';
 
 class LeaderboardTabBar extends StatelessWidget {
   const LeaderboardTabBar({super.key});

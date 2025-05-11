@@ -1,8 +1,4 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-import '../../domain/entities/leaderboard_entry.dart';
-
-part 'leaderboard_state.freezed.dart';
-part 'leaderboard_state.g.dart';
+part of 'leaderboard_bloc.dart';
 
 enum LeaderboardTab { scores, streaks, dailyStreaks }
 
@@ -18,9 +14,6 @@ abstract class LeaderboardState with _$LeaderboardState {
     @Default(false) bool isLoading,
     String? error,
   }) = _LeaderboardState;
-
-  factory LeaderboardState.fromJson(Map<String, dynamic> json) =>
-      _$LeaderboardStateFromJson(json);
 
   bool get isScoresTab => currentTab == LeaderboardTab.scores;
   bool get isStreaksTab => currentTab == LeaderboardTab.streaks;

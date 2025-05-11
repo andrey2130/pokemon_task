@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pokemon_task/feature/leaderboard/presentation/bloc/leaderboard_bloc.dart';
-import 'package:pokemon_task/feature/leaderboard/presentation/bloc/leaderboard_event.dart';
 
 abstract class UserDataSource {
   Future<void> updateUserScore({required int score, required bool isCorrect});

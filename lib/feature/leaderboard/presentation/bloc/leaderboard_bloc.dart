@@ -1,11 +1,15 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../domain/usecases/get_top_scores_usecase.dart';
 import '../../domain/usecases/get_top_streaks_usecase.dart';
 import '../../domain/usecases/get_top_daily_streaks_usecase.dart';
 import '../../domain/usecases/update_user_score_usecase.dart';
 import '../../domain/params/leaderboard_params.dart';
-import 'leaderboard_event.dart';
-import 'leaderboard_state.dart';
+import '../../domain/entities/leaderboard_entry.dart';
+
+part 'leaderboard_event.dart';
+part 'leaderboard_state.dart';
+part 'leaderboard_bloc.freezed.dart';
 
 class LeaderboardBloc extends Bloc<LeaderboardEvent, LeaderboardState> {
   final GetTopScoresUseCase getTopScoresUseCase;

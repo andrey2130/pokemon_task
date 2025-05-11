@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pokemon_task/feature/leaderboard/presentation/bloc/leaderboard_bloc.dart';
 import '../../domain/entities/leaderboard_entry.dart';
-import '../bloc/leaderboard_state.dart';
+
 
 class LeaderboardList extends StatelessWidget {
   final List<LeaderboardEntry> entries;

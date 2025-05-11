@@ -1,6 +1,4 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-
-part 'leaderboard_event.freezed.dart';
+part of 'leaderboard_bloc.dart';
 
 @freezed
 abstract class LeaderboardEvent with _$LeaderboardEvent {
