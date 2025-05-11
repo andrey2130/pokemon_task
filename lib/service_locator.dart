@@ -136,6 +136,8 @@ void setupServiceLocator({required SharedPreferences prefs}) {
     ),
   );
 
-  // Профіль
-  sl.registerFactory(() => ProfileBloc(sl(), sl()));
+  sl.registerFactory<ProfileBloc>(
+    () =>
+        ProfileBloc(sl<GetUserInfoUseCase>(), sl<GetUserStatsStreamUseCase>()),
+  );
 }
