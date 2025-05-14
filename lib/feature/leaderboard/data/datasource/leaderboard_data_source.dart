@@ -68,11 +68,9 @@ class FirebaseLeaderboardDataSource implements LeaderboardDataSource {
   }) async {
     final userRef = _firestore.collection(_usersCollection).doc(userId);
 
-    // Get the current user data
     final userDoc = await userRef.get();
 
     if (!userDoc.exists) {
-      // Create new user document if it doesn't exist
       await userRef.set({
         'name': name,
         'score': scoreToAdd,
@@ -87,7 +85,6 @@ class FirebaseLeaderboardDataSource implements LeaderboardDataSource {
       return;
     }
 
-    // Existing implementation...
     final userData = userDoc.data() as Map<String, dynamic>;
 
     // Calculate the current streak
@@ -110,7 +107,6 @@ class FirebaseLeaderboardDataSource implements LeaderboardDataSource {
     final String today = _formatDateKey(playedAt);
 
     if (lastPlayedDay != today) {
-      // Check if this is the next consecutive day
       final DateTime lastPlayedDate =
           lastPlayedDay.isNotEmpty
               ? DateTime.parse(lastPlayedDay)
@@ -125,15 +121,12 @@ class FirebaseLeaderboardDataSource implements LeaderboardDataSource {
       if (lastPlayedDate.year == yesterday.year &&
           lastPlayedDate.month == yesterday.month &&
           lastPlayedDate.day == yesterday.day) {
-        // Played on consecutive days
         dailyStreak += 1;
       } else {
-        // Streak broken
         dailyStreak = 1;
       }
     }
 
-    // Update the user document
     await userRef.update({
       'name': name,
       'score': FieldValue.increment(scoreToAdd),
@@ -147,7 +140,6 @@ class FirebaseLeaderboardDataSource implements LeaderboardDataSource {
     });
   }
 
-  // Helper methods
   List<Map<String, dynamic>> _extractData(QuerySnapshot querySnapshot) {
     return querySnapshot.docs.map((doc) {
       final data = doc.data() as Map<String, dynamic>;

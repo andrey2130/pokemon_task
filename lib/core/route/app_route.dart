@@ -24,7 +24,6 @@ class AppRoute {
         final isLoginRoute = state.matchedLocation == '/login';
         final isRegisterRoute = state.matchedLocation == '/register';
 
-        
         if (isAuthenticated && (isLoginRoute || isRegisterRoute)) {
           return '/home';
         }
