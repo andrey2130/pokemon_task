@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:pokemon_task/feature/game/presentation/pages/home_page.dart';
+import 'package:pokemon_task/feature/game/presentation/pages/game_page.dart';
 import 'package:pokemon_task/feature/profile/presentation/pages/profile_page.dart';
 import 'package:pokemon_task/feature/leaderboard/presentation/bloc/leaderboard_bloc.dart';
 import 'package:pokemon_task/feature/leaderboard/presentation/pages/leaderboard_page.dart';
