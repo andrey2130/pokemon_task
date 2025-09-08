@@ -93,7 +93,7 @@ class AppTheme {
       ),
       labelStyle: const TextStyle(color: Color(0xFF8B5A3A)),
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       elevation: 2.0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
       color: const Color(0xFFFFF8E1),
@@ -189,7 +189,7 @@ class AppTheme {
       ),
       labelStyle: const TextStyle(color: Colors.white70),
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       elevation: 2.0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
       color: const Color(0xFF1E1E1E),
